@@ -1,7 +1,17 @@
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { Response } from 'express';
+import { RolesDto } from './roles.dto';
 
 @ApiTags('Roles')
 @Controller('roles')
@@ -15,7 +25,10 @@ export class RolesController {
   async show(@Param('id') id: string, @Res() res: Response) {}
 
   @Post()
-  async create(@Res() res: Response) {}
+  async create(@Body() body: RolesDto, @Res() res: Response) {
+    const r = await this.service.store(body);
+    res.status(r.statusCode).send(r);
+  }
 
   @Put(':id')
   async update(@Param('id') id: string, @Res() res: Response) {}
