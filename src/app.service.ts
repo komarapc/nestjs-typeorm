@@ -1,5 +1,6 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
 import { ResponseApi, responseOk } from './utils/response-api';
+
+import { Injectable } from '@nestjs/common';
 
 type Data = {
   app_name: string;

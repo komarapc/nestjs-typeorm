@@ -18,7 +18,7 @@ type ResponseErrorPayload<E> = {
   message?: string;
 };
 
-const HTTP_STATUS_MESSAGE: Record<number, string> = {
+export const HTTP_STATUS_MESSAGE: Record<number, string> = {
   [HttpStatus.OK]: 'OK',
   [HttpStatus.CREATED]: 'Created',
   [HttpStatus.BAD_REQUEST]: 'Bad Request',

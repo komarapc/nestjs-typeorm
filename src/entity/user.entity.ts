@@ -18,7 +18,7 @@ export class UserEntity {
   @Column()
   password: string;
   @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  created_at?: Date;
   @UpdateDateColumn({ type: 'timestamptz', nullable: true })
   updated_at?: Date;
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })

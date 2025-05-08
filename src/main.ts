@@ -1,3 +1,4 @@
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -19,6 +20,28 @@ async function bootstrap() {
     type: VersioningType.URI,
     prefix: 'v',
   });
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('API Docs')
+    .setDescription('API Documentation')
+    .setVersion('1.0.0')
+    .build();
+  const factory = () => SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('docs', app, factory(), {
+    swaggerOptions: {
+      defaultModelsExpandDepth: -1,
+      docExpansion: 'none',
+      filter: true,
+      showRequestDuration: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
+      syntaxHighlight: {
+        activate: true,
+        theme: 'arta',
+      },
+    },
+  });
+
   await app.listen(config.app.port ?? 3000);
 }
 bootstrap();
