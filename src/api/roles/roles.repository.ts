@@ -68,4 +68,13 @@ export class RolesRepository {
       throw error;
     }
   }
+
+  async destroy(id: string) {
+    try {
+      await this.repo.update(id, { deleted_at: new Date() });
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

@@ -87,4 +87,19 @@ export class RolesService {
       });
     }
   }
+
+  async destroy(id: string) {
+    try {
+      const role = await this.rolesRepo.findById(id);
+      if (!role) return responseBadRequest({ message: 'Role not found' });
+      await this.rolesRepo.destroy(id);
+      return responseOk({ message: 'Role deleted successfully' });
+    } catch (error) {
+      const zodErr = zodErrorParse(error);
+      if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
+      return responseInternalServerError({
+        message: error?.message || 'Internal Server Error',
+      });
+    }
+  }
 }
