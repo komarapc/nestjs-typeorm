@@ -4,11 +4,10 @@ import {
   UserQuerySchema,
   UserUpdateSchema,
 } from './users.schema';
-import { generateId } from 'src/utils/lib';
+import { generateId } from '@/common/utils/lib';
 import { UserEntity } from 'src/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
-import { Users } from './users';
 
 @Injectable()
 export class UsersRepository {

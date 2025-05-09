@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { RolesQuerySchema, RolesSchema } from './roles.schema';
-import { generateId } from '@/utils/lib';
+import { generateId } from '@/common/utils/lib';
 
 @Injectable()
 export class RolesRepository {

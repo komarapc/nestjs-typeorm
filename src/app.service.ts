@@ -1,4 +1,4 @@
-import { ResponseApi, responseOk } from './utils/response-api';
+import { ResponseApi, responseOk } from './common/utils/response-api';
 
 import { Injectable } from '@nestjs/common';
 

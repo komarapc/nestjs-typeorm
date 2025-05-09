@@ -6,14 +6,14 @@ import {
   responseInternalServerError,
   responseNotFound,
   responseOk,
-} from 'src/utils/response-api';
+} from '@/common/utils/response-api';
 import {
   UserUpdateDto,
   UserUpdatePasswordDto,
   UsersCreateDto,
   UsersQueryDto,
 } from './users.dto';
-import { createHash, metaPagination, zodErrorParse } from 'src/utils/lib';
+import { createHash, metaPagination, zodErrorParse } from '@/common/utils/lib';
 import {
   userCreateSchema,
   userQuerySchema,

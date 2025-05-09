@@ -1,4 +1,4 @@
-import { safeInputTextRegex } from '../../utils/lib';
+import { safeInputTextRegex } from '../../common/utils/lib';
 import { z } from 'zod';
 
 const userCreateSchema = z

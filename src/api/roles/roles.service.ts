@@ -1,12 +1,12 @@
 import { RolesDto, RolesQueryDto } from './roles.dto';
-import { metaPagination, zodErrorParse } from '@/utils/lib';
+import { metaPagination, zodErrorParse } from '@/common/utils/lib';
 import {
   responseBadRequest,
   responseConflict,
   responseCreated,
   responseInternalServerError,
   responseOk,
-} from '@/utils/response-api';
+} from '@/common/utils/response-api';
 import { rolesQuerySchema, rolesSchema } from './roles.schema';
 
 import { Injectable } from '@nestjs/common';

@@ -1,5 +1,5 @@
 import { ApiResponse } from '@nestjs/swagger';
-import { HTTP_STATUS_MESSAGE } from 'src/utils/response-api';
+import { HTTP_STATUS_MESSAGE } from '@/common/utils/response-api';
 import { applyDecorators } from '@nestjs/common';
 
 export function OpenApiResponses(status: Array<number>) {
