@@ -1,8 +1,8 @@
 import { RolesEntity } from '@/entity/roles.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { RolesSchema } from './roles.schema';
+import { FindOptionsWhere, ILike, Repository } from 'typeorm';
+import { RolesQuerySchema, RolesSchema } from './roles.schema';
 import { generateId } from '@/utils/lib';
 
 @Injectable()
@@ -11,6 +11,23 @@ export class RolesRepository {
     @InjectRepository(RolesEntity)
     private readonly repo: Repository<RolesEntity>,
   ) {}
+
+  async findAll(query: RolesQuerySchema) {
+    try {
+      const { code, name, page, limit } = query;
+      const where: FindOptionsWhere<RolesEntity> = {};
+      if (code) where.code = ILike(`%${code}%`);
+      if (name) where.name = ILike(`%${name}%`);
+      const [data, total] = await this.repo.findAndCount({
+        where,
+        take: limit,
+        skip: (page - 1) * limit,
+      });
+      return { data, total };
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async store(data: RolesSchema) {
     try {

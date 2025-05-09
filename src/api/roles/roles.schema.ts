@@ -11,7 +11,13 @@ const rolesSchema = z.object({
     message: 'Name contains invalid characters',
   }),
 });
-
+const rolesQuerySchema = z.object({
+  code: z.string().optional(),
+  name: z.string().optional(),
+  page: z.coerce.number().optional().default(1),
+  limit: z.coerce.number().optional().default(10),
+});
+type RolesQuerySchema = z.infer<typeof rolesQuerySchema>;
 type RolesSchema = z.infer<typeof rolesSchema>;
-export { rolesSchema };
-export type { RolesSchema };
+export { rolesSchema, rolesQuerySchema };
+export type { RolesSchema, RolesQuerySchema };
