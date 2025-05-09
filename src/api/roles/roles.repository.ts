@@ -1,5 +1,5 @@
 import { RolesEntity } from '@/entity/roles.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { RolesQuerySchema, RolesSchema } from './roles.schema';
@@ -54,6 +54,16 @@ export class RolesRepository {
   async findByCode(code: string) {
     try {
       return await this.repo.findOne({ where: { code } });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async update(id: string, data: RolesSchema) {
+    const { code, name } = data;
+    try {
+      await this.repo.update(id, { code, name });
+      return await this.findById(id);
     } catch (error) {
       throw error;
     }

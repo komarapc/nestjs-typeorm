@@ -65,4 +65,26 @@ export class RolesService {
       });
     }
   }
+
+  async update(id: string, data: RolesDto) {
+    try {
+      const parsed = rolesSchema.parse(data);
+      const [roles, existingRole] = await Promise.all([
+        this.rolesRepo.findById(id),
+        this.rolesRepo.findByCode(parsed.code),
+      ]);
+      if (!roles) return responseBadRequest({ message: 'Role not found' });
+
+      if (existingRole && existingRole.id !== id)
+        return responseConflict({ message: 'Role already exists' });
+      const updatedRole = await this.rolesRepo.update(id, parsed);
+      return responseOk({ data: updatedRole });
+    } catch (error) {
+      const zodErr = zodErrorParse(error);
+      if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
+      return responseInternalServerError({
+        message: error?.message || 'Internal Server Error',
+      });
+    }
+  }
 }

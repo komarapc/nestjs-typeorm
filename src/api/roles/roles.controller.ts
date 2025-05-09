@@ -38,7 +38,14 @@ export class RolesController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Res() res: Response) {}
+  async update(
+    @Body() body: RolesDto,
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    const r = await this.service.update(id, body);
+    res.status(r.statusCode).send(r);
+  }
 
   @Delete(':id')
   async destroy(@Param('id') id: string, @Res() res: Response) {}
