@@ -3,6 +3,7 @@ import {
   responseConflict,
   responseCreated,
   responseInternalServerError,
+  responseOk,
 } from '@/utils/response-api';
 
 import { Injectable } from '@nestjs/common';
@@ -26,6 +27,18 @@ export class RolesService {
     } catch (error) {
       const zodErr = zodErrorParse(error);
       if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
+      return responseInternalServerError({
+        message: error?.message || 'Internal Server Error',
+      });
+    }
+  }
+
+  async show(id: string) {
+    try {
+      const role = await this.rolesRepo.findById(id);
+      if (!role) return responseBadRequest({ message: 'Role not found' });
+      return responseOk({ data: role });
+    } catch (error) {
       return responseInternalServerError({
         message: error?.message || 'Internal Server Error',
       });
