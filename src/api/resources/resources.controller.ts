@@ -40,9 +40,6 @@ export class ResourcesController {
     res.status(r.statusCode).send(r);
   }
 
-  @Post('bulk')
-  async bulkCreate(@Body() body: ResourcesBulkDto, @Res() res: Response) {}
-
   @Put(':id')
   async update(
     @Body() body: ResourcesDto,
