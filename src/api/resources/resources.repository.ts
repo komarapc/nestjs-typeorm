@@ -1,5 +1,5 @@
 import { ResourceEntity } from '@/database/entity/resources.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import {
@@ -48,6 +48,25 @@ export class ResourceRepository {
       });
       const result = await this.repository.save(resource);
       return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async update(id: string, data: ResourcesCreateSchema) {
+    try {
+      await this.repository.update(id, data);
+      return await this.findById(id);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async destroy(id: string) {
+    try {
+      const deleted = await this.repository.softDelete(id);
+      if (!deleted.affected) throw new NotFoundException('Resource not found');
+      return deleted;
     } catch (error) {
       throw error;
     }

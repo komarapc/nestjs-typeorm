@@ -45,8 +45,14 @@ export class ResourcesController {
     @Body() body: ResourcesDto,
     @Param('id') id: string,
     @Res() res: Response,
-  ) {}
+  ) {
+    const r = await this.service.update(id, body);
+    res.status(r.statusCode).send(r);
+  }
 
   @Delete(':id')
-  async destroy(@Param('id') id: string, @Res() res: Response) {}
+  async destroy(@Param('id') id: string, @Res() res: Response) {
+    const r = await this.service.destroy(id);
+    res.status(r.statusCode).send(r);
+  }
 }

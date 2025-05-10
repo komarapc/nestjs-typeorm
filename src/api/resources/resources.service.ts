@@ -1,3 +1,4 @@
+import { HttpException, Injectable } from '@nestjs/common';
 import { ResourcesDto, ResourcesQueryDto } from './resources.dto';
 import {
   ResponseApi,
@@ -10,7 +11,6 @@ import {
 import { metaPagination, zodErrorParse } from '@/common/utils/lib';
 import { resourceQuerySchema, resourcesCreateSchema } from './resources.schema';
 
-import { Injectable } from '@nestjs/common';
 import { ResourceRepository } from './resources.repository';
 
 @Injectable()
@@ -56,6 +56,35 @@ export class ResourcesService {
     } catch (error) {
       const zodErr = zodErrorParse(error);
       if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
+      return responseInternalServerError({
+        message: error?.message || 'Internal Server Error',
+      });
+    }
+  }
+
+  async update(id: string, data: ResourcesDto): Promise<ResponseApi> {
+    try {
+      const parsed = resourcesCreateSchema.parse(data);
+      const resource = await this.resourceRepo.findById(id);
+      if (!resource) return responseNotFound({ message: 'Resource not found' });
+      const updatedResource = await this.resourceRepo.update(id, parsed);
+      return responseOk({ data: updatedResource });
+    } catch (error) {
+      const zodErr = zodErrorParse(error);
+      if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
+      return responseInternalServerError({
+        error: error?.message || 'Internal Server Error',
+      });
+    }
+  }
+
+  async destroy(id: string) {
+    try {
+      const resource = await this.resourceRepo.findById(id);
+      if (!resource) return responseNotFound({ message: 'Resource not found' });
+      await this.resourceRepo.destroy(id);
+      return responseOk({ message: 'Resource deleted successfully' });
+    } catch (error) {
       return responseInternalServerError({
         message: error?.message || 'Internal Server Error',
       });
