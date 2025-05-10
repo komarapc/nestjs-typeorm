@@ -21,7 +21,22 @@ export class HasRoleRepository {
     const [data, total] = await this.repository.findAndCount({
       where: { user_id },
       relationLoadStrategy: 'join',
-      relations: {},
+      relations: {
+        user: true,
+        role: true,
+      },
+      select: {
+        id: true,
+        role: {
+          id: true,
+          name: true,
+        },
+        user: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
       take: limit,
       skip: offset,
     });
