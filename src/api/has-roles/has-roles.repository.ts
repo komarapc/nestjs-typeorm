@@ -52,4 +52,12 @@ export class HasRoleRepository {
     const updated = await this.repository.update(id, { role_id, user_id });
     return await this.findById(id);
   }
+
+  async destroy(id: string) {
+    try {
+      return await this.repository.delete(id);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
