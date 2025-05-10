@@ -13,6 +13,6 @@ export const databaseConfig: PostgresConnectionOptions = {
   database: process.env.DB_NAME || '',
   synchronize: true, // Set to false in production
   logging: false,
-  entities: [__dirname + '/../entity/*.entity{.ts,.js}'],
-  migrations: [__dirname + '/../migration/*{.ts,.js}'],
+  entities: [__dirname + '/../database/entity/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/../database/migration/*{.ts,.js}'],
 };

@@ -5,7 +5,7 @@ import {
   UserUpdateSchema,
 } from './users.schema';
 import { generateId } from '@/common/utils/lib';
-import { UserEntity } from 'src/entity/user.entity';
+import { UserEntity } from '@/database/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 

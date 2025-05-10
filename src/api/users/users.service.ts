@@ -22,7 +22,7 @@ import {
 } from './users.schema';
 
 import { Injectable } from '@nestjs/common';
-import { UserEntity } from 'src/entity/user.entity';
+import { UserEntity } from '@/database/entity/user.entity';
 import { UsersRepository } from './users.repository';
 
 @Injectable()

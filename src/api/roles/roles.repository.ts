@@ -1,4 +1,4 @@
-import { RolesEntity } from '@/entity/roles.entity';
+import { RolesEntity } from '@/database/entity/roles.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';

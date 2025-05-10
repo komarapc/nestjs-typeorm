@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ResourceEntity } from '@/entity/resources.entity';
+import { ResourceEntity } from '@/database/entity/resources.entity';
 import { ResourceRepository } from './resources.repository';
 import { ResourcesController } from './resources.controller';
 import { ResourcesService } from './resources.service';
