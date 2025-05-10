@@ -2,6 +2,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -44,12 +45,22 @@ export class HasRolesController {
   }
 
   @Put(':id')
+  @ApiOperation({ summary: 'Update a role' })
+  @OpenApiResponses([200, 400, 404, 409, 500])
   async update(
     @Body() body: HasRoleDto,
     @Res() res: Response,
     @Param('id') id: string,
   ) {
     const r = await this.service.update(id, body);
+    res.status(r.statusCode).send(r);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a role' })
+  @OpenApiResponses([200, 400, 404, 500])
+  async destroy(@Param('id') id: string, @Res() res: Response) {
+    const r = await this.service.destroy(id);
     res.status(r.statusCode).send(r);
   }
 }

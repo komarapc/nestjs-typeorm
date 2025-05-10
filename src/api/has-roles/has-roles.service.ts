@@ -1,5 +1,4 @@
-import { HasRoleRepository } from './has-roles.repository';
-import { Injectable } from '@nestjs/common';
+import { HasRoleDto, HasRoleQueryDto } from '@/api/has-roles/has-roles.dto';
 import {
   ResponseApi,
   responseBadRequest,
@@ -13,8 +12,10 @@ import {
   hasRoleQuerySchema,
   hasRoleSchema,
 } from '@/api/has-roles/has-roles.schema';
-import { HasRoleDto, HasRoleQueryDto } from '@/api/has-roles/has-roles.dto';
 import { metaPagination, zodErrorParse } from '@/common/utils/lib';
+
+import { HasRoleRepository } from './has-roles.repository';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class HasRolesService {
@@ -90,6 +91,20 @@ export class HasRolesService {
       if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
       return responseInternalServerError({
         message: e?.message || 'Internal Server Error',
+      });
+    }
+  }
+
+  async destroy(id: string): Promise<ResponseApi> {
+    try {
+      const existing = await this.hasRoleRepo.findById(id);
+      if (!existing)
+        return responseNotFound({ message: 'Role does not exist' });
+      await this.hasRoleRepo.destroy(id);
+      return responseOk({ message: 'Role deleted successfully' });
+    } catch (error) {
+      return responseInternalServerError({
+        message: error.message || 'Internal Server Error',
       });
     }
   }
