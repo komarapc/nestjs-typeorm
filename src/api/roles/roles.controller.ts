@@ -15,7 +15,7 @@ import { Response } from 'express';
 import { RolesDto, RolesQueryDto } from './roles.dto';
 
 @ApiTags('Roles')
-@Controller('roles')
+@Controller({ version: ['1'], path: 'roles' })
 export class RolesController {
   constructor(private readonly service: RolesService) {}
 

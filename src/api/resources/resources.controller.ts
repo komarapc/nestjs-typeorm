@@ -1,4 +1,4 @@
 import { Controller } from '@nestjs/common';
 
-@Controller('resources')
+@Controller({ version: '1', path: 'resources' })
 export class ResourcesController {}
