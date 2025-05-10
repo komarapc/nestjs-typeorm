@@ -29,7 +29,10 @@ export class ResourcesController {
   }
 
   @Get(':id')
-  async show(@Param('id') id: string, @Res() res: Response) {}
+  async show(@Param('id') id: string, @Res() res: Response) {
+    const r = await this.service.show(id);
+    res.status(r.statusCode).send(r);
+  }
 
   @Post()
   async create(@Body() body: ResourcesDto, @Res() res: Response) {

@@ -35,6 +35,10 @@ export class ResourceRepository {
     return { data, total };
   }
 
+  async findById(id: string) {
+    return await this.repository.findOne({ where: { id } });
+  }
+
   async store(data: ResourcesCreateSchema) {
     try {
       const id = generateId();

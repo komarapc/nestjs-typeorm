@@ -4,6 +4,7 @@ import {
   responseBadRequest,
   responseCreated,
   responseInternalServerError,
+  responseNotFound,
   responseOk,
 } from '@/common/utils/response-api';
 import { metaPagination, zodErrorParse } from '@/common/utils/lib';
@@ -29,6 +30,18 @@ export class ResourcesService {
     } catch (error) {
       const zodErr = zodErrorParse(error);
       if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
+      return responseInternalServerError({
+        message: error?.message || 'Internal Server Error',
+      });
+    }
+  }
+
+  async show(id: string): Promise<ResponseApi> {
+    try {
+      const resource = await this.resourceRepo.findById(id);
+      if (!resource) return responseNotFound({ message: 'Resource not found' });
+      return responseOk({ data: resource });
+    } catch (error) {
       return responseInternalServerError({
         message: error?.message || 'Internal Server Error',
       });
