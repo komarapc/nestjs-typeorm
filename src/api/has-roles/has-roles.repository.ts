@@ -22,19 +22,15 @@ export class HasRoleRepository {
       where: { user_id },
       relationLoadStrategy: 'join',
       relations: {
-        user: true,
         role: true,
       },
       select: {
         id: true,
+        created_at: true,
+        updated_at: true,
         role: {
           id: true,
           name: true,
-        },
-        user: {
-          id: true,
-          name: true,
-          email: true,
         },
       },
       take: limit,
@@ -44,7 +40,24 @@ export class HasRoleRepository {
   }
 
   async findById(id: string): Promise<HasRolesEntity | null> {
-    return await this.repository.findOne({ where: { id } });
+    return await this.repository.findOne({
+      where: { id },
+      relationLoadStrategy: 'join',
+      relations: { role: true, user: true },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        role: {
+          id: true,
+          name: true,
+        },
+        user: {
+          id: true,
+          name: true,
+        },
+      },
+    });
   }
 
   async findHasRoleUser(role_id: string, user_id: string) {
