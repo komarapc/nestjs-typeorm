@@ -85,7 +85,7 @@ export class HasRolesService {
       if (duplicate && duplicate.id !== existing.id)
         return responseConflict({ message: 'Role already exist' });
       const updatedData = await this.hasRoleRepo.update(id, parsed);
-      return responseOk({ data: updatedData });
+      return responseOk({ data: updatedData, message: 'Updated successfully' });
     } catch (e) {
       const zodErr = zodErrorParse(e);
       if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
