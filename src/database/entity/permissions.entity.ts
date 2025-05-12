@@ -2,9 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { ResourceEntity } from './resources.entity';
+import { RolesEntity } from './roles.entity';
 
 export enum Action {
   GET = 'GET',
@@ -33,4 +38,11 @@ export class PermissionsEntity {
   updated_at: Date;
   @Column({ type: 'timestamptz', nullable: true })
   deleted_at: Date | null;
+
+  @ManyToOne(() => RolesEntity, (r) => r.has_permissions)
+  @JoinColumn({ name: 'role_id' })
+  role: RolesEntity;
+  @ManyToOne(() => ResourceEntity, (r) => r.has_permissions)
+  @JoinColumn({ name: 'resource_id' })
+  resource: ResourceEntity;
 }

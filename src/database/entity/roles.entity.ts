@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { HasRolesEntity } from './has-roles.entity';
+import { PermissionsEntity } from './permissions.entity';
 
 @Entity('roles')
 export class RolesEntity {
@@ -30,4 +31,10 @@ export class RolesEntity {
     onDelete: 'RESTRICT',
   })
   has_roles?: HasRolesEntity[];
+
+  @OneToMany(() => PermissionsEntity, (r) => r.role, {
+    cascade: true,
+    onDelete: 'RESTRICT',
+  })
+  has_permissions?: PermissionsEntity[];
 }

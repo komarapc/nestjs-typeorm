@@ -20,8 +20,8 @@ export class ResourcesQueryDto {
   name?: string;
   @ApiProperty({ required: false })
   path?: string;
-  @ApiProperty()
+  @ApiProperty({ default: 1 })
   page?: number;
-  @ApiProperty()
+  @ApiProperty({ default: 10 })
   limit?: number;
 }
