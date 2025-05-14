@@ -77,9 +77,15 @@ export class PermissionsService {
   async update(id: string, data: PermissionsCreateDto) {
     try {
       const parsed = permissionsCreateSchema.parse(data);
-      const permission = await this.repo.findById(id);
+      const [permission, role, resource] = await Promise.all([
+        this.repo.findById(id),
+        this.roleRepo.findById(parsed.role_id),
+        this.resourceRepo.findById(parsed.resource_id),
+      ]);
       if (!permission)
         return responseNotFound({ message: 'Permission Not Found' });
+      if (!role) return responseNotFound({ message: 'Role not found' });
+      if (!resource) return responseNotFound({ message: 'Resource not found' });
       const updated = await this.repo.update(id, parsed);
       return responseOk({ data: updated });
     } catch (error) {
