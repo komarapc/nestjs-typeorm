@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -36,7 +37,7 @@ export class PermissionsEntity {
   created_at: Date;
   @UpdateDateColumn({ type: 'timestamptz', nullable: true })
   updated_at: Date;
-  @Column({ type: 'timestamptz', nullable: true })
+  @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deleted_at: Date | null;
 
   @ManyToOne(() => RolesEntity, (r) => r.has_permissions)
