@@ -15,3 +15,13 @@ export class PermissionsCreateDto {
   })
   action: Array<Action>;
 }
+
+@ApiSchema({ name: 'Permissions Query' })
+export class PermissionQueryDto {
+  @ApiProperty()
+  role_id: string;
+  @ApiProperty({ default: 1 })
+  page: number;
+  @ApiProperty({ default: 10 })
+  limit: number;
+}

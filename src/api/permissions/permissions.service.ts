@@ -1,3 +1,4 @@
+import { PermissionQueryDto, PermissionsCreateDto } from './permissions.dto';
 import {
   ResponseApi,
   responseBadRequest,
@@ -6,14 +7,16 @@ import {
   responseNotFound,
   responseOk,
 } from '@/common/utils/response-api';
+import { metaPagination, zodErrorParse } from '@/common/utils/lib';
+import {
+  permissionsCreateSchema,
+  permissionsQuerySchema,
+} from './permissions.schema';
 
 import { Injectable } from '@nestjs/common';
-import { PermissionsCreateDto } from './permissions.dto';
 import { PermissionsRepository } from './permissions.repository';
 import { ResourceRepository } from '../resources/resources.repository';
 import { RolesRepository } from '../roles/roles.repository';
-import { permissionsCreateSchema } from './permissions.schema';
-import { zodErrorParse } from '@/common/utils/lib';
 
 @Injectable()
 export class PermissionsService {
@@ -22,7 +25,24 @@ export class PermissionsService {
     private readonly roleRepo: RolesRepository,
     private readonly resourceRepo: ResourceRepository,
   ) {}
-
+  async index(query: PermissionQueryDto) {
+    try {
+      const parsed = permissionsQuerySchema.parse(query);
+      const { data: permissions, total } = await this.repo.findAll(parsed);
+      const meta = metaPagination({
+        page: parsed.page,
+        limit: parsed.limit,
+        total,
+      });
+      return responseOk({ data: { permissions, meta } });
+    } catch (error) {
+      const zodErr = zodErrorParse(error);
+      if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
+      return responseInternalServerError({
+        message: error.message || 'Internal Server Error',
+      });
+    }
+  }
   async store(data: PermissionsCreateDto) {
     try {
       const parsed = permissionsCreateSchema.parse(data);
@@ -47,6 +67,37 @@ export class PermissionsService {
       const data = await this.repo.findById(id);
       if (!data) return responseNotFound({ message: 'Permission Not Found' });
       return responseOk({ data });
+    } catch (error) {
+      return responseInternalServerError({
+        message: error.message || 'Internal Server Error',
+      });
+    }
+  }
+
+  async update(id: string, data: PermissionsCreateDto) {
+    try {
+      const parsed = permissionsCreateSchema.parse(data);
+      const permission = await this.repo.findById(id);
+      if (!permission)
+        return responseNotFound({ message: 'Permission Not Found' });
+      const updated = await this.repo.update(id, parsed);
+      return responseOk({ data: updated });
+    } catch (error) {
+      const zodErr = zodErrorParse(error);
+      if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
+      return responseInternalServerError({
+        message: error.message || 'Internal Server Error',
+      });
+    }
+  }
+
+  async destroy(id: string) {
+    try {
+      const permission = await this.repo.findById(id);
+      if (!permission)
+        return responseNotFound({ message: 'Permission Not Found' });
+      await this.repo.destroy(id);
+      return responseOk({ message: 'Permission Deleted' });
     } catch (error) {
       return responseInternalServerError({
         message: error.message || 'Internal Server Error',
