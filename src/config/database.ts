@@ -11,7 +11,7 @@ export const databaseConfig: PostgresConnectionOptions = {
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME || '',
-  synchronize: true, // Set to false in production
+  synchronize: process.env.NODE_ENV === 'development', // Set to false in production
   logging: false,
   entities: [__dirname + '/../database/entity/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../database/migration/*{.ts,.js}'],
