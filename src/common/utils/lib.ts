@@ -65,11 +65,13 @@ function metaPagination({ page, total, limit }: MetaPagination): Meta {
 const safeInputTextRegex = /^[a-zA-Z0-9_]+$/;
 const safeInputNumberRegex = /^[0-9]+$/;
 const onlySpecialCharsRegex = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/;
-
+const regexPassword =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/;
 export {
   safeInputNumberRegex,
   safeInputTextRegex,
   onlySpecialCharsRegex,
+  regexPassword,
   zodErrorParse,
   generateId,
   createHash,

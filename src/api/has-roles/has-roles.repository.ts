@@ -60,6 +60,23 @@ export class HasRoleRepository {
     });
   }
 
+  async findByUserId(user_id: string) {
+    return await this.repository.find({
+      where: { user_id },
+      relationLoadStrategy: 'join',
+      relations: { role: true },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        role: {
+          id: true,
+          name: true,
+        },
+      },
+    });
+  }
+
   async findHasRoleUser(role_id: string, user_id: string) {
     return await this.repository.findOne({ where: { role_id, user_id } });
   }
