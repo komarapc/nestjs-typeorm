@@ -71,7 +71,7 @@ export class RolesRepository {
 
   async destroy(id: string) {
     try {
-      await this.repo.update(id, { deleted_at: new Date() });
+      await this.repo.softDelete(id);
       return true;
     } catch (error) {
       throw error;

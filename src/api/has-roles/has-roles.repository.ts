@@ -83,7 +83,7 @@ export class HasRoleRepository {
 
   async destroy(id: string) {
     try {
-      return await this.repository.delete(id);
+      return await this.repository.softDelete(id);
     } catch (error) {
       throw error;
     }
