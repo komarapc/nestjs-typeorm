@@ -4,9 +4,10 @@ import { ResourcesModule } from './resources/resources.module';
 import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
 import { HasRolesModule } from './has-roles/has-roles.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UsersModule, RolesModule, ResourcesModule, PermissionsModule, HasRolesModule],
+  imports: [UsersModule, RolesModule, ResourcesModule, PermissionsModule, HasRolesModule, AuthModule],
   controllers: [],
   providers: [],
 })
