@@ -29,13 +29,8 @@ export const options = {
 
 // Default function that will be executed for each virtual user
 export default function () {
-  // create a random number between 1 and 1000
-  const randomNumber = Math.floor(Math.random() * 1000) + 1;
   const targetUrl = `http://localhost:${port}/api`;
-  // const targetUrl = `http://localhost:8000/api/user-list?page=${randomNumber}`;
-  // Make HTTP request to the homepage
   const res = http.get(targetUrl);
-
   // Check if the request was successful (status 200)
   const success = check(res, {
     'status is 200': (r) => r.status === 200,
