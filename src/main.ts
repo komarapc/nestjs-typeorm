@@ -23,6 +23,7 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('API Docs')
+    .addBearerAuth()
     .setDescription('API Documentation')
     .setVersion('1.0.0')
     .build();

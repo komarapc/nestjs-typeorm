@@ -6,6 +6,9 @@ type Config = {
     port: number;
     host: string;
   };
+  secret: {
+    jwt: string;
+  };
 };
 export function appConfig(): Config {
   return {
@@ -15,6 +18,9 @@ export function appConfig(): Config {
       version: process.env.APP_VERSION || '1.0.0',
       port: parseInt(process.env.PORT || '3000', 10),
       host: process.env.APP_HOST || 'localhost',
+    },
+    secret: {
+      jwt: process.env.JWT_SECRET || 'secret',
     },
   };
 }

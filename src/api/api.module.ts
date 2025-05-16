@@ -8,6 +8,7 @@ import {
 import { AuthModule } from './auth/auth.module';
 import { HasRolesModule } from './has-roles/has-roles.module';
 import { JwtMiddleware } from '@/common/middleware/jwt/jwt.middleware';
+import { JwtService } from '@nestjs/jwt';
 import { LoggerMiddleware } from '@/common/middleware/logger/logger.middleware';
 import { PermissionsModule } from './permissions/permissions.module';
 import { ResourcesModule } from './resources/resources.module';
@@ -24,7 +25,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [JwtService],
 })
 export class ApiModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

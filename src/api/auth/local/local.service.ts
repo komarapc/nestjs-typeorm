@@ -41,7 +41,7 @@ export class LocalService {
         return responseBadRequest({ message: 'Invalid credentials' });
       const payload = { user_id: user.id };
       const accessToken = this.jwt.sign(payload, {
-        expiresIn: '1h',
+        expiresIn: '3m',
         secret: process.env.JWT_SECRET,
       });
       return responseOk({

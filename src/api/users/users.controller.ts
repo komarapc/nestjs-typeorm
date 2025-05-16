@@ -21,9 +21,11 @@ import {
 } from './users.dto';
 import { Request, Response } from 'express';
 import { REQUEST } from '@nestjs/core';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
 
+@ApiTags('Users')
+@ApiBearerAuth()
 @Controller({ version: ['1'], path: 'users' })
 export class UsersController {
   constructor(
