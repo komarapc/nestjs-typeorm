@@ -1,4 +1,4 @@
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -15,6 +15,7 @@ import { Response } from 'express';
 import { RolesDto, RolesQueryDto } from './roles.dto';
 
 @ApiTags('Roles')
+@ApiBearerAuth()
 @Controller({ version: ['1'], path: 'roles' })
 export class RolesController {
   constructor(private readonly service: RolesService) {}

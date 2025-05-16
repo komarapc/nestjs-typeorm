@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -16,6 +16,7 @@ import { PermissionQueryDto, PermissionsCreateDto } from './permissions.dto';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
 
 @ApiTags('permissions')
+@ApiBearerAuth()
 @Controller({ version: ['1'], path: 'permissions' })
 export class PermissionsController {
   constructor(private readonly service: PermissionsService) {}

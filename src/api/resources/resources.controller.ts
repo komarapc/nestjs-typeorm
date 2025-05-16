@@ -11,13 +11,12 @@ import {
 } from '@nestjs/common';
 import { ResourcesService } from './resources.service';
 import { Response } from 'express';
-import {
-  ResourcesBulkDto,
-  ResourcesDto,
-  ResourcesQueryDto,
-} from './resources.dto';
+import { ResourcesDto, ResourcesQueryDto } from './resources.dto';
 import { ResponseApi } from '@/common/utils/response-api';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Resources')
+@ApiBearerAuth()
 @Controller({ version: '1', path: 'resources' })
 export class ResourcesController {
   constructor(private readonly service: ResourcesService) {}

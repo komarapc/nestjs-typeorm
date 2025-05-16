@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -16,6 +16,7 @@ import { Response } from 'express';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
 
 @ApiTags('Has Roles')
+@ApiBearerAuth()
 @Controller({ version: ['1'], path: 'has-roles' })
 export class HasRolesController {
   constructor(private readonly service: HasRolesService) {}
