@@ -1,19 +1,20 @@
 import * as bcrypt from 'bcrypt';
 
+import { LocalSignInDto, LocalSignInRolesDto } from './local.dto';
 import { compareHash, zodErrorParse } from '@/common/utils/lib';
+import { localAuthSchema, localAuthSchemaWithRole } from './local.schema';
 import {
   responseBadRequest,
   responseInternalServerError,
   responseNotFound,
   responseOk,
+  responseUnauthorized,
 } from '@/common/utils/response-api';
 
 import { HasRoleRepository } from '@/api/has-roles/has-roles.repository';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LocalSignInDto } from './local.dto';
 import { UsersRepository } from '@/api/users/users.repository';
-import { localAuthSchema } from './local.schema';
 
 @Injectable()
 export class LocalService {
@@ -49,6 +50,34 @@ export class LocalService {
           has_roles: hasRoles,
           access_token: accessToken,
         },
+      });
+    } catch (error) {
+      const zodErr = zodErrorParse(error);
+      if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
+      return responseInternalServerError({
+        error: error.message || 'Internal Server Error',
+      });
+    }
+  }
+
+  async localSignInRole(data: LocalSignInRolesDto) {
+    try {
+      const parsed = localAuthSchemaWithRole.parse(data);
+      const [user, role] = await Promise.all([
+        this.userRepo.findById(parsed.user_id),
+        this.hasRolesRepo.findHasRoleUser(parsed.user_id, parsed.role_id),
+      ]);
+      if (!user || !role)
+        return responseUnauthorized({ message: 'Unauthorized' });
+      const payload = { user_id: user.id, role_id: role.role_id };
+      const accessToken = this.jwt.signAsync(payload, {
+        expiresIn: '12h',
+        secret: process.env.JWT_SECRET,
+      });
+      const { password, ...restUser } = user;
+      return responseOk({
+        message: 'Login success',
+        data: { access_token: accessToken, user: restUser, role: role.role },
       });
     } catch (error) {
       const zodErr = zodErrorParse(error);

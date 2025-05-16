@@ -7,3 +7,11 @@ export class LocalSignInDto {
   @ApiProperty({ minLength: 8 })
   password: string;
 }
+
+@ApiSchema({ name: 'Local Sign In Roles' })
+export class LocalSignInRolesDto {
+  @ApiProperty()
+  user_id: string;
+  @ApiProperty()
+  role_id: string;
+}

@@ -78,7 +78,11 @@ export class HasRoleRepository {
   }
 
   async findHasRoleUser(role_id: string, user_id: string) {
-    return await this.repository.findOne({ where: { role_id, user_id } });
+    return await this.repository.findOne({
+      where: { role_id, user_id },
+      relationLoadStrategy: 'join',
+      relations: { role: true },
+    });
   }
 
   async store(data: HasRoleSchema) {
