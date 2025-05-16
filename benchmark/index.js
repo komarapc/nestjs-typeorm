@@ -5,7 +5,7 @@ import http from 'k6/http';
 
 // Custom metric to track failure rate
 const failRate = new Rate('failed_requests');
-const port = 8000; // Port for the server
+const port = 8080; // Port for the server
 // Test configuration with ramping VUs
 export const options = {
   scenarios: {
@@ -31,7 +31,7 @@ export const options = {
 export default function () {
   // create a random number between 1 and 1000
   const randomNumber = Math.floor(Math.random() * 1000) + 1;
-  const targetUrl = `http://localhost:${port}`;
+  const targetUrl = `http://localhost:${port}/api`;
   // const targetUrl = `http://localhost:8000/api/user-list?page=${randomNumber}`;
   // Make HTTP request to the homepage
   const res = http.get(targetUrl);
