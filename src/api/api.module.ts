@@ -1,6 +1,14 @@
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
+
 import { AuthModule } from './auth/auth.module';
 import { HasRolesModule } from './has-roles/has-roles.module';
-import { Module } from '@nestjs/common';
+import { JwtMiddleware } from '@/common/middleware/jwt/jwt.middleware';
+import { LoggerMiddleware } from '@/common/middleware/logger/logger.middleware';
 import { PermissionsModule } from './permissions/permissions.module';
 import { ResourcesModule } from './resources/resources.module';
 import { RolesModule } from './roles/roles.module';
@@ -18,4 +26,15 @@ import { UsersModule } from './users/users.module';
   controllers: [],
   providers: [],
 })
-export class ApiModule {}
+export class ApiModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*path');
+    consumer
+      .apply(JwtMiddleware)
+      .exclude(
+        { path: '', method: RequestMethod.GET },
+        { path: '/auth/local/sign-in', method: RequestMethod.POST },
+      )
+      .forRoutes('*path');
+  }
+}
