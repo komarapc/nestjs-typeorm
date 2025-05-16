@@ -9,14 +9,17 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { Response } from 'express';
 import { PermissionQueryDto, PermissionsCreateDto } from './permissions.dto';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
+import { RoleGuard } from '@/common/guards/role/role.guard';
 
-@ApiTags('permissions')
+@ApiTags('Permissions')
 @ApiBearerAuth()
+@UseGuards(RoleGuard)
 @Controller({ version: ['1'], path: 'permissions' })
 export class PermissionsController {
   constructor(private readonly service: PermissionsService) {}

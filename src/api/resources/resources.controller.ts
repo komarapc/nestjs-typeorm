@@ -8,15 +8,18 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ResourcesService } from './resources.service';
 import { Response } from 'express';
 import { ResourcesDto, ResourcesQueryDto } from './resources.dto';
 import { ResponseApi } from '@/common/utils/response-api';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { RoleGuard } from '@/common/guards/role/role.guard';
 
 @ApiTags('Resources')
 @ApiBearerAuth()
+@UseGuards(RoleGuard)
 @Controller({ version: '1', path: 'resources' })
 export class ResourcesController {
   constructor(private readonly service: ResourcesService) {}

@@ -1,5 +1,3 @@
-import * as bcrypt from 'bcrypt';
-
 import { LocalSignInDto, LocalSignInRolesDto } from './local.dto';
 import { compareHash, zodErrorParse } from '@/common/utils/lib';
 import { localAuthSchema, localAuthSchemaWithRole } from './local.schema';
@@ -44,9 +42,10 @@ export class LocalService {
         expiresIn: '3m',
         secret: process.env.JWT_SECRET,
       });
+      const { password, ...restUser } = user;
       return responseOk({
         data: {
-          user,
+          user: restUser,
           has_roles: hasRoles,
           access_token: accessToken,
         },
@@ -65,12 +64,12 @@ export class LocalService {
       const parsed = localAuthSchemaWithRole.parse(data);
       const [user, role] = await Promise.all([
         this.userRepo.findById(parsed.user_id),
-        this.hasRolesRepo.findHasRoleUser(parsed.user_id, parsed.role_id),
+        this.hasRolesRepo.findHasRoleUser(parsed.role_id, parsed.user_id),
       ]);
       if (!user || !role)
         return responseUnauthorized({ message: 'Unauthorized' });
       const payload = { user_id: user.id, role_id: role.role_id };
-      const accessToken = this.jwt.signAsync(payload, {
+      const accessToken = await this.jwt.signAsync(payload, {
         expiresIn: '12h',
         secret: process.env.JWT_SECRET,
       });

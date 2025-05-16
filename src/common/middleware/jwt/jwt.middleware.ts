@@ -26,19 +26,18 @@ export class JwtMiddleware implements NestMiddleware {
       const verifiedToken = this.jwt.verify(token, this.jwtOptions());
       if (!verifiedToken) return this.handleError(res, 401, 'Token is invalid');
     } catch (error) {
-      this.tokenExpiredError(error, res);
+      if (error.name === 'TokenExpiredError') {
+        this.tokenExpiredError(error, res);
+        return;
+      }
       return this.handleError(res, 401, 'Token is invalid');
     }
     next();
   }
 
   private tokenExpiredError(err: any, res: ServerResponse) {
-    const isExp = err.name === 'TokenExpiredError';
-    if (isExp) {
-      const message = err.message;
-      this.logger.error(message);
-      this.handleError(res, 401, message);
-    }
+    const message = err.message;
+    this.handleError(res, 401, message);
   }
 
   private handleError(

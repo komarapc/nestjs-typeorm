@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { LocalService } from './local.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LocalSignInDto, LocalSignInRolesDto } from './local.dto';
 import { Response } from 'express';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
@@ -18,6 +18,7 @@ export class LocalController {
   }
 
   @Post('sign-in/role')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Local Sign In Role' })
   @OpenApiResponses([200, 400, 404, 500])
   async localSignInRole(

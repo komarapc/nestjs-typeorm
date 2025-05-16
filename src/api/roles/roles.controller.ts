@@ -9,13 +9,16 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { Response } from 'express';
 import { RolesDto, RolesQueryDto } from './roles.dto';
+import { RoleGuard } from '@/common/guards/role/role.guard';
 
 @ApiTags('Roles')
 @ApiBearerAuth()
+@UseGuards(RoleGuard)
 @Controller({ version: ['1'], path: 'roles' })
 export class RolesController {
   constructor(private readonly service: RolesService) {}

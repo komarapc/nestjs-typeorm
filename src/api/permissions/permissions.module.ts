@@ -1,3 +1,4 @@
+import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { PermissionsController } from './permissions.controller';
 import { PermissionsEntity } from '@/database/entity/permissions.entity';
@@ -15,6 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   ],
   controllers: [PermissionsController],
   providers: [
+    JwtService,
     PermissionsService,
     PermissionsRepository,
     RolesRepository,

@@ -46,6 +46,14 @@ export class PermissionsRepository {
     });
   }
 
+  async findByRoleId(role_id: string) {
+    return await this.repository.find({
+      where: { role_id },
+      relationLoadStrategy: 'join',
+      relations: { resource: true },
+    });
+  }
+
   async store(data: PermissionsCreateSchema) {
     return this.repository.save(
       this.repository.create({

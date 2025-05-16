@@ -10,6 +10,7 @@ import {
   Query,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
@@ -23,9 +24,11 @@ import { Request, Response } from 'express';
 import { REQUEST } from '@nestjs/core';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
+import { RoleGuard } from '@/common/guards/role/role.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth()
+@UseGuards(RoleGuard)
 @Controller({ version: ['1'], path: 'users' })
 export class UsersController {
   constructor(
