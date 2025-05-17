@@ -1,11 +1,10 @@
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-
 import { ApiModule } from './api/api.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { RateLimiterGuard } from './common/guards/rate-limiter/rate-limiter.guard';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './config/database';
 

@@ -1,5 +1,4 @@
 import {
-  CanActivate,
   ExecutionContext,
   HttpException,
   HttpStatus,
@@ -8,7 +7,6 @@ import {
 import { ThrottlerGuard, ThrottlerLimitDetail } from '@nestjs/throttler';
 
 import { HTTP_STATUS_MESSAGE } from '@/common/utils/response-api';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class RateLimiterGuard extends ThrottlerGuard {
