@@ -14,6 +14,7 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { ResourcesModule } from './resources/resources.module';
 import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
+import { SitesModule } from './sites/sites.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
     PermissionsModule,
     HasRolesModule,
     AuthModule,
+    SitesModule,
   ],
   controllers: [],
   providers: [JwtService],
