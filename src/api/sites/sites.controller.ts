@@ -10,14 +10,17 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { SitesService } from './sites.service';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
 import { SitesDto, SitesQueryDto } from './sites.dto';
 import { Response } from 'express';
+import { RoleGuard } from '@/common/guards/role/role.guard';
 
 @ApiTags('Sites')
 @ApiBearerAuth()
+@UseGuards(RoleGuard)
 @Controller({ version: ['1'], path: 'sites' })
 export class SitesController {
   constructor(private readonly service: SitesService) {}
