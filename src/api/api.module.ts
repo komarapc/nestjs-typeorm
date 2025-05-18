@@ -13,8 +13,8 @@ import { LoggerMiddleware } from '@/common/middleware/logger/logger.middleware';
 import { PermissionsModule } from './permissions/permissions.module';
 import { ResourcesModule } from './resources/resources.module';
 import { RolesModule } from './roles/roles.module';
-import { UsersModule } from './users/users.module';
 import { SitesModule } from './sites/sites.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
