@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
+import { Action } from '@/database/entity/permissions.entity';
 import { JwtService } from '@nestjs/jwt';
 import { PermissionsRepository } from '@/api/permissions/permissions.repository';
 import { Request } from 'express';
@@ -33,6 +34,10 @@ export class RoleGuard implements CanActivate {
         path: p.resource.path,
       }),
     );
+    const hasAllPermission = permissions?.some((p) =>
+      p.allowedMethod.includes(Action.ALL),
+    );
+    if (hasAllPermission) return true;
     if (!permissions.length) throw new ForbiddenException('Forbidden Resource');
     const hasPermission = permissions?.some((permission) => {
       const { allowedMethod, path } = permission;

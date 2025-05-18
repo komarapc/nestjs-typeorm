@@ -3,9 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { SitesEntity } from './sites.entity';
 
 @Entity('loctions')
 export class LocationsEntity {
@@ -23,4 +27,8 @@ export class LocationsEntity {
   updated_at?: Date;
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deleted_at?: Date;
+
+  @ManyToOne(() => SitesEntity, (r) => r.locations)
+  @JoinColumn({ name: 'site_id' })
+  site: SitesEntity;
 }
