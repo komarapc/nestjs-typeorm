@@ -13,7 +13,7 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - DB_HOST=host.docker.internal
-      - REDIS_HOST=redis
+      - REDIS_HOST=host.docker.internal
       - REDIS_PORT=6379
     deploy:
       replicas: 6
@@ -28,8 +28,6 @@ services:
         condition: on-failure
     volumes:
       - uploads:/usr/src/app/uploads
-    depends_on:
-      - redis
 
   nginx:
     image: nginx:alpine
@@ -41,16 +39,6 @@ services:
     depends_on:
       - app
 
-  redis:
-    image: redis:alpine3.21
-    restart: unless-stopped
-    ports:
-      - '6379:6379'
-    volumes:
-      - redis-data:/data
-
 volumes:
   uploads:
-    driver: local
-  redis-data:
     driver: local
