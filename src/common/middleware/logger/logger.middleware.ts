@@ -2,7 +2,7 @@ import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  private readonly logger = new Logger(LoggerMiddleware.name);
+  private readonly logger = new Logger();
   async use(req: any, res: any, next: () => void) {
     const { method, originalUrl } = req;
     const startTime = Date.now();
