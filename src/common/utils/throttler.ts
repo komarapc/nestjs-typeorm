@@ -1,13 +1,13 @@
 import { ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
 import { HTTP_STATUS_MESSAGE, responseBadRequest } from './response-api';
+import { ThrottlerOptions, seconds } from '@nestjs/throttler';
 
 import { Request } from 'express';
-import { ThrottlerOptions } from '@nestjs/throttler';
 
 export const throttler: ThrottlerOptions[] = [
   {
     name: 'short',
-    ttl: 10 * 1000, // 10 seconds
+    ttl: seconds(10), // 10 seconds
     limit: 100, // 100 requests
   },
 ];

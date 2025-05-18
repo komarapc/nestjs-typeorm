@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerProvider } from './common/utils/provider';
+import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './config/database';
 
@@ -15,6 +16,7 @@ import { databaseConfig } from './config/database';
     ThrottlerModule.forRoot({
       throttlers: throttler,
       getTracker: trackerThrottler,
+      storage: new ThrottlerStorageRedisService(),
     }),
     TypeOrmModule.forRoot(databaseConfig),
     ConfigModule.forRoot(),
