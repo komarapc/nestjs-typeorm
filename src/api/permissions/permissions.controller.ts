@@ -18,10 +18,12 @@ import { PermissionQueryDto, PermissionsCreateDto } from './permissions.dto';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
 import { RoleGuard } from '@/common/guards/role/role.guard';
 import { JwtAuthInterceptor } from '@/common/interceptor/jwt-auth/jwt-auth.interceptor';
+import { CacheRequestInterceptor } from '@/common/interceptor/cache-request/cache-request.interceptor';
 
 @ApiTags('Permissions')
 @ApiBearerAuth()
 @UseGuards(RoleGuard)
+@UseInterceptors(CacheRequestInterceptor)
 @UseInterceptors(JwtAuthInterceptor)
 @Controller({ version: ['1'], path: 'permissions' })
 export class PermissionsController {

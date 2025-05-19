@@ -7,20 +7,35 @@ import {
   responseNotFound,
   responseOk,
 } from '@/common/utils/response-api';
-import { metaPagination, zodErrorParse } from '@/common/utils/lib';
+import {
+  MetaPagination,
+  metaPagination,
+  zodErrorParse,
+} from '@/common/utils/lib';
 import {
   permissionsCreateSchema,
   permissionsQuerySchema,
 } from './permissions.schema';
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PermissionsRepository } from './permissions.repository';
 import { ResourceRepository } from '../resources/resources.repository';
 import { RolesRepository } from '../roles/roles.repository';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { CacheRequestService } from '@/common/services/cache-request/cache-request.service';
+import { seconds } from '@nestjs/throttler';
+import { PermissionsEntity } from '@/database/entity/permissions.entity';
 
+type CachePermissions = {
+  permissions: PermissionsEntity[];
+  meta: MetaPagination;
+};
 @Injectable()
 export class PermissionsService {
   constructor(
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
+    private readonly cacheKey: CacheRequestService,
     private readonly repo: PermissionsRepository,
     private readonly roleRepo: RolesRepository,
     private readonly resourceRepo: ResourceRepository,
@@ -28,12 +43,16 @@ export class PermissionsService {
   async index(query: PermissionQueryDto) {
     try {
       const parsed = permissionsQuerySchema.parse(query);
+      const cacheKey = this.cacheKey.getCacheKey();
+      const cacheData = await this.cache.get<CachePermissions>(cacheKey);
+      if (cacheData) return responseOk({ data: cacheData });
       const { data: permissions, total } = await this.repo.findAll(parsed);
       const meta = metaPagination({
         page: parsed.page,
         limit: parsed.limit,
         total,
       });
+      await this.cache.set(cacheKey, { permissions, meta }, seconds(30));
       return responseOk({ data: { permissions, meta } });
     } catch (error) {
       const zodErr = zodErrorParse(error);
@@ -64,8 +83,12 @@ export class PermissionsService {
   }
   async show(id: string): Promise<ResponseApi> {
     try {
-      const data = await this.repo.findById(id);
+      const cacheKey = this.cacheKey.getCacheKey();
+      let data = await this.cache.get<PermissionsCreateDto>(cacheKey);
+      if (data) return responseOk({ data });
+      data = await this.repo.findById(id);
       if (!data) return responseNotFound({ message: 'Permission Not Found' });
+      await this.cache.set(cacheKey, data, seconds(30));
       return responseOk({ data });
     } catch (error) {
       return responseInternalServerError({
