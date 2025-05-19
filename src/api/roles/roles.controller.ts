@@ -10,15 +10,18 @@ import {
   Query,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { Response } from 'express';
 import { RolesDto, RolesQueryDto } from './roles.dto';
 import { RoleGuard } from '@/common/guards/role/role.guard';
+import { CacheRequestInterceptor } from '@/common/interceptor/cache-request/cache-request.interceptor';
 
 @ApiTags('Roles')
 @ApiBearerAuth()
 @UseGuards(RoleGuard)
+@UseInterceptors(CacheRequestInterceptor)
 @Controller({ version: ['1'], path: 'roles' })
 export class RolesController {
   constructor(private readonly service: RolesService) {}

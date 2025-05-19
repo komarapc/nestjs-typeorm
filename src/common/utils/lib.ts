@@ -46,7 +46,7 @@ type MetaLink = {
   prev_page_link: string | null;
   links: Link[];
 };
-type Meta = {
+export type Meta = {
   current_page: number;
   total_data: number;
   total_page: number;
