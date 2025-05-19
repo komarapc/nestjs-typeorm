@@ -33,7 +33,7 @@ function uniqueCodeUppercase(length = 6) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   return customAlphabet(characters, 10)(length).toUpperCase();
 }
-type MetaPagination = {
+export type MetaPagination = {
   page: number;
   total: number;
   limit: number;

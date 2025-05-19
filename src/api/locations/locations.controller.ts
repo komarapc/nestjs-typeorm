@@ -10,6 +10,7 @@ import {
   Query,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { LocationsService } from './locations.service';
@@ -17,10 +18,12 @@ import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
 import { LocationQueryDto, LocationsDto } from './locations.dto';
 import { Response } from 'express';
 import { RoleGuard } from '@/common/guards/role/role.guard';
+import { CacheRequestInterceptor } from '@/common/interceptor/cache-request/cache-request.interceptor';
 
 @ApiTags('Locations')
 @ApiBearerAuth()
 @UseGuards(RoleGuard)
+@UseInterceptors(CacheRequestInterceptor)
 @Controller({ version: '1', path: 'locations' })
 export class LocationsController {
   constructor(private readonly service: LocationsService) {}

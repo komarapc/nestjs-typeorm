@@ -1,3 +1,4 @@
+import { CacheRequestService } from '@/common/services/cache-request/cache-request.service';
 import { JwtService } from '@nestjs/jwt';
 import { LocationsController } from './locations.controller';
 import { LocationsEntity } from '@/database/entity/locations.entity';
@@ -17,6 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [LocationsController],
   providers: [
     JwtService,
+    CacheRequestService,
     LocationsService,
     LocationsRepository,
     PermissionsRepository,

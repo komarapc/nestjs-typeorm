@@ -1,6 +1,10 @@
 import { LocationQueryDto, LocationsDto } from './locations.dto';
 import { locationQuerySchema, locationsSchema } from './locations.schema';
-import { metaPagination, zodErrorParse } from '@/common/utils/lib';
+import {
+  MetaPagination,
+  metaPagination,
+  zodErrorParse,
+} from '@/common/utils/lib';
 import {
   responseBadRequest,
   responseCreated,
@@ -9,19 +13,32 @@ import {
   responseOk,
 } from '@/common/utils/response-api';
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { LocationsRepository } from './locations.repository';
 import { SitesRepository } from '../sites/sites.repository';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { CacheRequestService } from '@/common/services/cache-request/cache-request.service';
+import { LocationsEntity } from '@/database/entity/locations.entity';
+import { seconds } from '@nestjs/throttler';
 
 @Injectable()
 export class LocationsService {
   constructor(
     private readonly locationRepo: LocationsRepository,
     private readonly siteRepo: SitesRepository,
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
+    private readonly cacheKey: CacheRequestService,
   ) {}
 
   async findAll(query: LocationQueryDto) {
     try {
+      const cacheKey = this.cacheKey.getCacheKey();
+      const cachedData = await this.cache.get<{
+        locations: LocationsEntity[];
+        meta: MetaPagination;
+      }>(cacheKey);
+      if (cachedData) return responseOk({ data: cachedData });
       const parsed = locationQuerySchema.parse(query);
       const { data, total } = await this.locationRepo.findAll(parsed);
       const meta = metaPagination({
@@ -29,6 +46,7 @@ export class LocationsService {
         page: parsed.page,
         total,
       });
+      await this.cache.set(cacheKey, { locations: data, meta }, seconds(30));
       return responseOk({ data: { locations: data, meta } });
     } catch (error) {
       const message = error.message || 'Internal Server Error';
@@ -55,8 +73,12 @@ export class LocationsService {
 
   async findOne(id: string) {
     try {
+      const cacheKey = this.cacheKey.getCacheKey();
+      const cachedData = await this.cache.get<LocationsEntity>(cacheKey);
+      if (cachedData) return responseOk({ data: cachedData });
       const location = await this.locationRepo.findById(id);
       if (!location) return responseNotFound({ message: 'Location not found' });
+      await this.cache.set(cacheKey, location, seconds(30));
       return responseOk({ data: location });
     } catch (error) {
       const message = error.message || 'Internal Server Error';
