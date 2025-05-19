@@ -11,16 +11,19 @@ import {
   Query,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { SitesService } from './sites.service';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
 import { SitesDto, SitesQueryDto } from './sites.dto';
 import { Response } from 'express';
 import { RoleGuard } from '@/common/guards/role/role.guard';
+import { CacheRequestInterceptor } from '@/common/interceptor/cache-request/cache-request.interceptor';
 
 @ApiTags('Sites')
 @ApiBearerAuth()
 @UseGuards(RoleGuard)
+@UseInterceptors(CacheRequestInterceptor)
 @Controller({ version: ['1'], path: 'sites' })
 export class SitesController {
   constructor(private readonly service: SitesService) {}

@@ -9,23 +9,36 @@ import {
 } from '@/common/utils/response-api';
 import { sitesQuerySchema, sitesSchema } from './sites.schema';
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { SitesRepository } from './sites.repository';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { CacheRequestService } from '@/common/services/cache-request/cache-request.service';
+import { seconds } from '@nestjs/throttler';
 
 @Injectable()
 export class SitesService {
-  constructor(private readonly siteRepo: SitesRepository) {}
+  constructor(
+    private readonly siteRepo: SitesRepository,
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
+    private readonly cacheKey: CacheRequestService,
+  ) {}
 
   async index(query: SitesQueryDto) {
     try {
       const parsed = sitesQuerySchema.parse(query);
+      const key = this.cacheKey.getCacheKey();
+      const cachedData = await this.cache.get(key);
+      if (cachedData) return responseOk({ data: cachedData });
       const { data, total } = await this.siteRepo.findAll(parsed);
       const meta = metaPagination({
         page: parsed.page,
         limit: parsed.limit,
         total,
       });
-      return responseOk({ data: { sites: data, meta } });
+      const dataResponse = { sites: data, meta };
+      await this.cache.set(key, dataResponse, seconds(30));
+      return responseOk({ data: dataResponse });
     } catch (error) {
       const zodErr = zodErrorParse(error);
       if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
@@ -37,8 +50,12 @@ export class SitesService {
 
   async findOne(id: string) {
     try {
+      const key = this.cacheKey.getCacheKey();
+      const cachedData = await this.cache.get(key);
+      if (cachedData) return responseOk({ data: cachedData });
       const site = await this.siteRepo.findOne(id);
       if (!site) return responseNotFound({ message: 'Site not found' });
+      await this.cache.set(key, site, seconds(30));
       return responseOk({ data: site });
     } catch (error) {
       return responseInternalServerError({

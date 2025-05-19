@@ -1,3 +1,4 @@
+import { CacheRequestService } from '@/common/services/cache-request/cache-request.service';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { PermissionsEntity } from '@/database/entity/permissions.entity';
@@ -11,6 +12,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [TypeOrmModule.forFeature([SitesEntity, PermissionsEntity])],
   controllers: [SitesController],
-  providers: [JwtService, SitesService, SitesRepository, PermissionsRepository],
+  providers: [
+    JwtService,
+    CacheRequestService,
+    SitesService,
+    SitesRepository,
+    PermissionsRepository,
+  ],
 })
 export class SitesModule {}
