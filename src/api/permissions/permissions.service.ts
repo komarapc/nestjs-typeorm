@@ -7,11 +7,7 @@ import {
   responseNotFound,
   responseOk,
 } from '@/common/utils/response-api';
-import {
-  MetaPagination,
-  metaPagination,
-  zodErrorParse,
-} from '@/common/utils/lib';
+import { Meta, metaPagination, zodErrorParse } from '@/common/utils/lib';
 import {
   permissionsCreateSchema,
   permissionsQuerySchema,
@@ -29,7 +25,7 @@ import { PermissionsEntity } from '@/database/entity/permissions.entity';
 
 type CachePermissions = {
   permissions: PermissionsEntity[];
-  meta: MetaPagination;
+  meta: Meta;
 };
 @Injectable()
 export class PermissionsService {
