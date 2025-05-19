@@ -11,6 +11,7 @@ import {
   Req,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
@@ -25,11 +26,13 @@ import { REQUEST } from '@nestjs/core';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
 import { RoleGuard } from '@/common/guards/role/role.guard';
+import { CacheRequestInterceptor } from '@/common/interceptor/cache-request/cache-request.interceptor';
 
 @ApiTags('Users')
 @ApiBearerAuth()
 @UseGuards(RoleGuard)
 @Controller({ version: ['1'], path: 'users' })
+@UseInterceptors(CacheRequestInterceptor)
 export class UsersController {
   constructor(
     @Inject(REQUEST) private readonly request: Request,

@@ -1,3 +1,4 @@
+import { CacheRequestService } from '@/common/services/cache-request/cache-request.service';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { PermissionsEntity } from '@/database/entity/permissions.entity';
@@ -11,6 +12,12 @@ import { UsersService } from './users.service';
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity, PermissionsEntity])],
   controllers: [UsersController],
-  providers: [JwtService, UsersService, UsersRepository, PermissionsRepository],
+  providers: [
+    JwtService,
+    CacheRequestService,
+    UsersService,
+    UsersRepository,
+    PermissionsRepository,
+  ],
 })
 export class UsersModule {}

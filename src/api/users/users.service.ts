@@ -21,13 +21,21 @@ import {
   userUpdateSchema,
 } from './users.schema';
 
-import { Injectable } from '@nestjs/common';
+import { CacheRequestService } from '@/common/services/cache-request/cache-request.service';
+import { Inject, Injectable } from '@nestjs/common';
 import { UserEntity } from '@/database/entity/user.entity';
 import { UsersRepository } from './users.repository';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { seconds } from '@nestjs/throttler';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepo: UsersRepository) {}
+  constructor(
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
+    private readonly userRepo: UsersRepository,
+    private readonly cacheKey: CacheRequestService,
+  ) {}
 
   private transformUser(user: UserEntity) {
     return {
@@ -41,6 +49,9 @@ export class UsersService {
 
   async index(query: UsersQueryDto): Promise<ResponseApi> {
     try {
+      const cacheKey = this.cacheKey.getCacheKey();
+      const cachedData = await this.cache.get(cacheKey);
+      if (cachedData) return responseOk({ data: cachedData });
       const parsed = userQuerySchema.parse(query);
       const { data, total } = await this.userRepo.findAll(parsed);
       const meta = metaPagination({
@@ -48,6 +59,7 @@ export class UsersService {
         page: parsed.page,
         total,
       });
+      await this.cache.set(cacheKey, { users: data, meta }, seconds(30));
       return responseOk({
         data: { users: data.map(this.transformUser), meta },
       });
@@ -60,8 +72,12 @@ export class UsersService {
 
   async findOne(id: string): Promise<ResponseApi> {
     try {
+      const cacheKey = this.cacheKey.getCacheKey();
+      const cachedData = await this.cache.get(cacheKey);
+      if (cachedData) return responseOk({ data: cachedData });
       const user = await this.userRepo.findById(id);
       if (!user) return responseNotFound({ message: 'User not found' });
+      await this.cache.set(cacheKey, user, seconds(30));
       return responseOk({ data: this.transformUser(user) });
     } catch (error) {
       return responseInternalServerError();
