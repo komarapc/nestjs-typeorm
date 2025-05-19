@@ -10,16 +10,19 @@ import {
   Query,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { Response } from 'express';
 import { PermissionQueryDto, PermissionsCreateDto } from './permissions.dto';
 import { OpenApiResponses } from '@/common/decorators/openapi.decorator';
 import { RoleGuard } from '@/common/guards/role/role.guard';
+import { JwtAuthInterceptor } from '@/common/interceptor/jwt-auth/jwt-auth.interceptor';
 
 @ApiTags('Permissions')
 @ApiBearerAuth()
 @UseGuards(RoleGuard)
+@UseInterceptors(JwtAuthInterceptor)
 @Controller({ version: ['1'], path: 'permissions' })
 export class PermissionsController {
   constructor(private readonly service: PermissionsService) {}

@@ -2,7 +2,7 @@ import {
   Action,
   PermissionsEntity,
 } from '@/database/entity/permissions.entity';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
@@ -10,12 +10,16 @@ import {
   PermissionsQuerySchema,
 } from './permissions.schema';
 import { generateId } from '@/common/utils/lib';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { seconds } from '@nestjs/throttler';
 
 @Injectable()
 export class PermissionsRepository {
   constructor(
     @InjectRepository(PermissionsEntity)
     private readonly repository: Repository<PermissionsEntity>,
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
   ) {}
 
   async findAll(query: PermissionsQuerySchema) {
@@ -47,11 +51,17 @@ export class PermissionsRepository {
   }
 
   async findByRoleId(role_id: string) {
-    return await this.repository.find({
+    const chacheKey = `permissions:role:${role_id}`;
+    const cacheData = await this.cache.get<PermissionsEntity[]>(chacheKey);
+    if (cacheData?.length) return cacheData;
+    const data = await this.repository.find({
       where: { role_id },
       relationLoadStrategy: 'join',
       relations: { resource: true },
     });
+    if (!data?.length) return [];
+    await this.cache.set(chacheKey, data, seconds(30));
+    return data;
   }
 
   async store(data: PermissionsCreateSchema) {
@@ -72,7 +82,11 @@ export class PermissionsRepository {
         resource_id: data.resource_id,
         action: data.action as Action[],
       });
-      return this.findById(id);
+      return this.repository.findOne({
+        where: { id },
+        relationLoadStrategy: 'join',
+        relations: { role: true, resource: true },
+      });
     } catch (error) {
       throw error;
     }

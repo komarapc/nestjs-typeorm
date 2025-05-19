@@ -1,4 +1,5 @@
 import { CacheRequestService } from '@/common/services/cache-request/cache-request.service';
+import { JwtAuthService } from '@/common/services/jwt-auth/jwt-auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { PermissionsEntity } from '@/database/entity/permissions.entity';
@@ -14,6 +15,7 @@ import { UsersService } from './users.service';
   controllers: [UsersController],
   providers: [
     JwtService,
+    JwtAuthService,
     CacheRequestService,
     UsersService,
     UsersRepository,

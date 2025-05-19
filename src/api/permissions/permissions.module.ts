@@ -1,3 +1,4 @@
+import { JwtAuthService } from '@/common/services/jwt-auth/jwt-auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { PermissionsController } from './permissions.controller';
@@ -17,6 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [PermissionsController],
   providers: [
     JwtService,
+    JwtAuthService,
     PermissionsService,
     PermissionsRepository,
     RolesRepository,

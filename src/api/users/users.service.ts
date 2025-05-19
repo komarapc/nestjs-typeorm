@@ -59,7 +59,11 @@ export class UsersService {
         page: parsed.page,
         total,
       });
-      await this.cache.set(cacheKey, { users: data, meta }, seconds(30));
+      await this.cache.set(
+        cacheKey,
+        { users: data.map(this.transformUser), meta },
+        seconds(30),
+      );
       return responseOk({
         data: { users: data.map(this.transformUser), meta },
       });
