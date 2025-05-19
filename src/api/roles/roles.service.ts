@@ -73,8 +73,12 @@ export class RolesService {
 
   async show(id: string) {
     try {
+      const key = this.cacheKey.getCacheKey();
+      const cachedData = await this.cache.get<RolesEntity>(key);
+      if (cachedData) return responseOk({ data: cachedData });
       const role = await this.rolesRepo.findById(id);
       if (!role) return responseBadRequest({ message: 'Role not found' });
+      await this.cache.set<RolesEntity>(key, role, seconds(30));
       return responseOk({ data: role });
     } catch (error) {
       return responseInternalServerError({
@@ -91,7 +95,6 @@ export class RolesService {
         this.rolesRepo.findByCode(parsed.code),
       ]);
       if (!roles) return responseBadRequest({ message: 'Role not found' });
-
       if (existingRole && existingRole.id !== id)
         return responseConflict({ message: 'Role already exists' });
       const updatedRole = await this.rolesRepo.update(id, parsed);
