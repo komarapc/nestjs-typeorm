@@ -26,16 +26,22 @@ const cacheRedisModuleConfig: CacheModuleAsyncOptions = {
   isGlobal: true,
   imports: [ConfigModule],
   inject: [ConfigService],
-  useFactory: async (config: ConfigService) => ({
-    stores: [
-      new Keyv({
-        store: new CacheableMemory({ ttl: seconds(30), lruSize: 1000 }),
-      }),
-      createKeyv(
-        `redis://${config.get('REDIS_HOST', 'localhost')}:${config.get('REDIS_PORT', '6379')}`,
-      ),
-    ],
-  }),
+  useFactory: async (config: ConfigService) => {
+    const redisConnection = `redis://${config.get('REDIS_HOST', 'localhost')}:${config.get('REDIS_PORT', '6379')}`;
+    const appName = config
+      .get('APP_NAME', 'app')
+      .toLowerCase()
+      .replace(/ /g, '_');
+
+    const storeCache = new CacheableMemory({ ttl: seconds(30), lruSize: 1000 });
+    const namespace = `cache_${appName}`;
+    return {
+      stores: [
+        new Keyv({ store: storeCache }),
+        createKeyv(redisConnection, { namespace }),
+      ],
+    };
+  },
 };
 
 export { throttlerModuleConfig, cacheRedisModuleConfig };

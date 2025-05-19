@@ -1,4 +1,3 @@
-import { CacheRedisProvider, ThrottlerProvider } from './common/utils/provider';
 import {
   cacheRedisModuleConfig,
   throttlerModuleConfig,
@@ -11,6 +10,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerProvider } from './common/utils/provider';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './config/database';
 
@@ -23,6 +23,6 @@ import { databaseConfig } from './config/database';
     ApiModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ThrottlerProvider, CacheRedisProvider],
+  providers: [AppService, ThrottlerProvider],
 })
 export class AppModule {}

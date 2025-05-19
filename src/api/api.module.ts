@@ -9,13 +9,13 @@ import { AuthModule } from './auth/auth.module';
 import { HasRolesModule } from './has-roles/has-roles.module';
 import { JwtMiddleware } from '@/common/middleware/jwt/jwt.middleware';
 import { JwtService } from '@nestjs/jwt';
+import { LocationsModule } from './locations/locations.module';
 import { LoggerMiddleware } from '@/common/middleware/logger/logger.middleware';
 import { PermissionsModule } from './permissions/permissions.module';
 import { ResourcesModule } from './resources/resources.module';
 import { RolesModule } from './roles/roles.module';
 import { SitesModule } from './sites/sites.module';
 import { UsersModule } from './users/users.module';
-import { LocationsModule } from './locations/locations.module';
 
 @Module({
   imports: [
