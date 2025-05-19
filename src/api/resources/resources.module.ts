@@ -1,3 +1,4 @@
+import { CacheRequestService } from '@/common/services/cache-request/cache-request.service';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { PermissionsEntity } from '@/database/entity/permissions.entity';
@@ -13,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [ResourcesController],
   providers: [
     JwtService,
+    CacheRequestService,
     ResourcesService,
     ResourceRepository,
     PermissionsRepository,
