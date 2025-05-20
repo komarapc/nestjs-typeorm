@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 
-import { AddressProvinces } from '../entity/address-province.entity';
+import { AddressProvincesEntity } from '../entity/address-province.entity';
 import { DataSource } from 'typeorm';
 import { parse } from 'csv-parse/sync';
 import { v7 } from 'uuid';
 
 export const seedProvinces = async (dataSource: DataSource) => {
-  const repo = dataSource.getRepository(AddressProvinces);
+  const repo = dataSource.getRepository(AddressProvincesEntity);
 
   // Read CSV file
   const csvFile = fs.readFileSync(

@@ -3,9 +3,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { AddressRegencyEntity } from './address-regency.entity';
+import { AddressVillagesEntity } from './address-villages.entity';
 
 @Entity('address_subdistricts')
 export class AddressSubdistrictEntity {
@@ -23,4 +29,11 @@ export class AddressSubdistrictEntity {
   updated_at?: Date;
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deleted_at?: Date;
+
+  @ManyToOne(() => AddressRegencyEntity, (r) => r.subdistricts)
+  @JoinColumn({ name: 'regency_code', referencedColumnName: 'code' })
+  regency?: AddressRegencyEntity;
+
+  @OneToMany(() => AddressVillagesEntity, (r) => r.subdistrict)
+  villages?: AddressVillagesEntity[];
 }
