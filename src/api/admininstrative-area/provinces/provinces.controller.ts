@@ -1,7 +1,9 @@
 import { Controller, Get, Query, Res } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
-@Controller({ version: ['1'], path: 'administrative-areaprovinces' })
+@ApiTags('Administrative Area - Provinces')
+@Controller({ version: ['1'], path: 'administrative-area/provinces' })
 export class ProvincesController {
   constructor() {}
 

@@ -19,7 +19,7 @@ export class AddressSubdistrictEntity {
   id: string;
   @Column()
   regency_code: string;
-  @Column()
+  @Column({ unique: true })
   code: string;
   @Column()
   name: string;
@@ -34,6 +34,8 @@ export class AddressSubdistrictEntity {
   @JoinColumn({ name: 'regency_code', referencedColumnName: 'code' })
   regency?: AddressRegencyEntity;
 
-  @OneToMany(() => AddressVillagesEntity, (r) => r.subdistrict)
+  @OneToMany(() => AddressVillagesEntity, (r) => r.subdistrict, {
+    nullable: true,
+  })
   villages?: AddressVillagesEntity[];
 }
