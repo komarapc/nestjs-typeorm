@@ -22,7 +22,7 @@ export const seedRegency = async (dataSource: DataSource) => {
 
   // Prepare plain objects for bulk insert
   const regencies = records.map((row: any) => ({
-    id: v7(),
+    id: v7().toUpperCase(),
     province_code: row.province_code,
     code: row.code,
     name: row.name,

@@ -22,7 +22,7 @@ export const seedProvinces = async (dataSource: DataSource) => {
 
   // Prepare plain objects for bulk insert
   const provinces = records.map((row: any) => ({
-    id: v7(), // Uncomment if you must set id manually
+    id: v7().toUpperCase(), // Uncomment if you must set id manually
     code: row.code,
     name: row.name,
   }));

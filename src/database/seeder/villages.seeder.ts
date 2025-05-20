@@ -19,7 +19,7 @@ export const seedVillages = async (dataSource: DataSource) => {
 
   // Prepare plain objects for bulk insert
   const villages = records.map((row: any) => ({
-    id: v7(),
+    id: v7().toUpperCase(),
     subdistrict_code: row.subdistrict_code,
     code: row.code,
     name: row.name,

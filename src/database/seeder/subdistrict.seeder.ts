@@ -21,7 +21,7 @@ export const seedSubdistrict = async (dataSource: DataSource) => {
 
   // Prepare plain objects for bulk insert
   const subdistricts = records.map((row: any) => ({
-    id: v7(),
+    id: v7().toUpperCase(),
     regency_code: row.regency_code,
     code: row.code,
     name: row.name,
