@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 
+import { DataSource } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 dotenv.config();
@@ -16,3 +17,5 @@ export const databaseConfig: PostgresConnectionOptions = {
   entities: [__dirname + '/../database/entity/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../database/migration/*{.ts,.js}'],
 };
+
+export const AppDataSource = new DataSource(databaseConfig);
