@@ -12,4 +12,4 @@ import { VillagesModule } from './villages/villages.module';
     VillagesModule,
   ],
 })
-export class DistrictModule {}
+export class AdmininstrativeAreaModule {}

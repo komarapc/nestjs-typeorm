@@ -1,4 +1,4 @@
 import { Controller } from '@nestjs/common';
 
-@Controller('villages')
+@Controller({ version: ['1'], path: 'administrative-area/villages' })
 export class VillagesController {}

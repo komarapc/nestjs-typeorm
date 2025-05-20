@@ -5,8 +5,8 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 
+import { AdmininstrativeAreaModule } from './admininstrative-area/admininstrative-area.module';
 import { AuthModule } from './auth/auth.module';
-import { DistrictModule } from './district/district.module';
 import { HasRolesModule } from './has-roles/has-roles.module';
 import { JwtMiddleware } from '@/common/middleware/jwt/jwt.middleware';
 import { JwtService } from '@nestjs/jwt';
@@ -28,7 +28,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     SitesModule,
     LocationsModule,
-    DistrictModule,
+    AdmininstrativeAreaModule,
   ],
   controllers: [],
   providers: [JwtService],

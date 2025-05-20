@@ -2,7 +2,7 @@ import { Controller, Get, Query, Res } from '@nestjs/common';
 import { RegenciesService } from './regencies.service';
 import { Response } from 'express';
 
-@Controller({ version: ['1'], path: 'district/regencies' })
+@Controller({ version: ['1'], path: 'administrative-arearegencies' })
 export class RegenciesController {
   constructor(private readonly service: RegenciesService) {}
 
