@@ -1,5 +1,10 @@
 import * as bcrypt from 'bcrypt';
 
+import {
+  responseBadRequest,
+  responseInternalServerError,
+} from './response-api';
+
 import { customAlphabet } from 'nanoid';
 import { v7 } from 'uuid';
 import { z } from 'zod';
@@ -67,6 +72,14 @@ const safeInputNumberRegex = /^[0-9]+$/;
 const onlySpecialCharsRegex = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/;
 const regexPassword =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/;
+
+const getErrorResponse = (error: any) => {
+  const message = error.message || 'Unknown error';
+  const zodErr = zodErrorParse(error);
+  if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
+  return responseInternalServerError({ message });
+};
+
 export {
   safeInputNumberRegex,
   safeInputTextRegex,
@@ -78,4 +91,5 @@ export {
   compareHash,
   uniqueCodeUppercase,
   metaPagination,
+  getErrorResponse,
 };
