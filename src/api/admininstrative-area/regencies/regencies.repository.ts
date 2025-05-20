@@ -22,7 +22,6 @@ export class RegenciesRepository {
     const [data, total] = await this.repo.findAndCount({
       where,
       order: { name: 'ASC' },
-      cache: true,
       take: limit,
       skip: offset,
       relations: { province: true },

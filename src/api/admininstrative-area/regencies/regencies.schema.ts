@@ -1,20 +1,20 @@
+import { regexName, regexRegular } from '@/common/utils/regex';
+
 import { z } from 'zod';
 
-const regex = /^[a-zA-Z0-9.]+$/;
-const regexName = /^[a-zA-Z0-9.\s]+$/;
 const regencySchema = z.object({
   province_code: z
     .string()
     .nonempty()
-    .regex(regex, 'Only letters and numbers are allowed'),
+    .regex(regexRegular, 'Only letters, numbers  and . are allowed'),
   code: z
     .string()
     .nonempty()
-    .regex(regex, 'Only letters and numbers are allowed'),
+    .regex(regexRegular, 'Only letters, numbers and . are allowed'),
   name: z
     .string()
     .nonempty()
-    .regex(regexName, 'Only letters and spaces are allowed'),
+    .regex(regexName, 'Only letters, numbers and space are allowed'),
 });
 const regencyQuerySchema = z.object({
   province_code: z.string().optional(),
