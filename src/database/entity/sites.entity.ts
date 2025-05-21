@@ -3,11 +3,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+import { AddressEntity } from './address.entity';
 import { LocationsEntity } from './locations.entity';
 
 @Entity('sites')
@@ -28,4 +31,10 @@ export class SitesEntity {
     onDelete: 'RESTRICT',
   })
   locations: LocationsEntity[];
+
+  @OneToOne(() => AddressEntity, (r) => r.has_site, {
+    createForeignKeyConstraints: false,
+  })
+  @JoinColumn({ name: 'id', referencedColumnName: 'ref_id' })
+  address?: AddressEntity;
 }

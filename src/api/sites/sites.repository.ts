@@ -21,6 +21,15 @@ export class SitesRepository {
       where,
       take: limit,
       skip: offset,
+      relationLoadStrategy: 'join',
+      relations: {
+        address: {
+          province: true,
+          regency: true,
+          subdistrict: true,
+          village: true,
+        },
+      },
     });
     return { data, total };
   }

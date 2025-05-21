@@ -5,10 +5,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+import { AddressEntity } from './address.entity';
 import { AddressSubdistrictEntity } from './address-subdistrict.entity';
 
 @Entity('address_villages')
@@ -33,4 +35,6 @@ export class AddressVillagesEntity {
   })
   @JoinColumn({ name: 'subdistrict_code', referencedColumnName: 'code' })
   subdistrict?: AddressSubdistrictEntity;
+  @OneToMany(() => AddressEntity, (r) => r.village)
+  address?: AddressEntity[];
 }

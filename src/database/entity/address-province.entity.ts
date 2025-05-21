@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+import { AddressEntity } from './address.entity';
 import { AddressRegencyEntity } from './address-regency.entity';
 
 @Entity('address_provinces')
@@ -27,4 +29,7 @@ export class AddressProvincesEntity {
 
   @OneToMany(() => AddressRegencyEntity, (r) => r.province)
   regencies: AddressRegencyEntity[];
+
+  @OneToMany(() => AddressEntity, (r) => r.province)
+  address: AddressEntity[];
 }

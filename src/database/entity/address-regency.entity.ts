@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { AddressEntity } from './address.entity';
 import { AddressProvincesEntity } from './address-province.entity';
 import { AddressSubdistrictEntity } from './address-subdistrict.entity';
 
@@ -38,4 +39,7 @@ export class AddressRegencyEntity {
 
   @OneToMany(() => AddressSubdistrictEntity, (r) => r.regency)
   subdistricts?: AddressSubdistrictEntity[];
+
+  @OneToMany(() => AddressEntity, (r) => r.regency)
+  address?: AddressEntity[];
 }
