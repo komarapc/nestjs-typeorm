@@ -35,7 +35,17 @@ export class SitesRepository {
   }
 
   async findOne(id: string) {
-    return await this.repo.findOne({ where: { id } });
+    return await this.repo.findOne({
+      where: { id },
+      relations: {
+        address: {
+          province: true,
+          regency: true,
+          subdistrict: true,
+          village: true,
+        },
+      },
+    });
   }
 
   async store(data: SitesSchema) {
