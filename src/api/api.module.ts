@@ -5,6 +5,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 
+import { AddressModule } from './address/address.module';
 import { AdmininstrativeAreaModule } from './admininstrative-area/admininstrative-area.module';
 import { AuthModule } from './auth/auth.module';
 import { HasRolesModule } from './has-roles/has-roles.module';
@@ -29,6 +30,7 @@ import { UsersModule } from './users/users.module';
     SitesModule,
     LocationsModule,
     AdmininstrativeAreaModule,
+    AddressModule,
   ],
   controllers: [],
   providers: [JwtService],
