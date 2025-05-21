@@ -18,6 +18,7 @@ import { ResourcesModule } from './resources/resources.module';
 import { RolesModule } from './roles/roles.module';
 import { SitesModule } from './sites/sites.module';
 import { UsersModule } from './users/users.module';
+import { UnitItemsModule } from './unit-items/unit-items.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UsersModule } from './users/users.module';
     LocationsModule,
     AdmininstrativeAreaModule,
     AddressModule,
+    UnitItemsModule,
   ],
   controllers: [],
   providers: [JwtService],
