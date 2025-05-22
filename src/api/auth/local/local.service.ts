@@ -70,7 +70,7 @@ export class LocalService {
         return responseUnauthorized({ message: 'Unauthorized' });
       const payload = { user_id: user.id, role_id: role.role_id };
       const accessToken = await this.jwt.signAsync(payload, {
-        expiresIn: '12h',
+        expiresIn: '24h',
         secret: process.env.JWT_SECRET,
       });
       const { password, ...restUser } = user;
