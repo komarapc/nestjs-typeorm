@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import { seedProvinces } from './provinces.seeder';
 import { seedRegency } from './regency.seeder';
 import { seedSubdistrict } from './subdistrict.seeder';
+import { seedUnitItem } from './unit-item.seeder';
 import { seedVillages } from './villages.seeder';
 
 AppDataSource.initialize()
@@ -12,6 +13,7 @@ AppDataSource.initialize()
       // seedRegency(dataSource),
       // seedSubdistrict(dataSource),
       // seedVillages(dataSource),
+      // seedUnitItem(dataSource),
     ]);
   })
   .catch((error) => {
