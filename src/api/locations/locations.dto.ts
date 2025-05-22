@@ -8,6 +8,12 @@ export class LocationsDto {
   name: string;
   @ApiProperty({ required: false })
   description?: string;
+  @ApiProperty({
+    required: false,
+    format: 'uuid',
+    description: 'parent location id',
+  })
+  parent_id?: string;
 }
 @ApiSchema({ name: 'LocationQuery' })
 export class LocationQueryDto {

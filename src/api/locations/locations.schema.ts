@@ -4,6 +4,7 @@ const locationsSchema = z.object({
   site_id: z.string().uuid(),
   name: z.string().min(1),
   description: z.string().optional(),
+  parent_id: z.string().optional(),
 });
 const locationQuerySchema = z.object({
   name: z.string().optional(),

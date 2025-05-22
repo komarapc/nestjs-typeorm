@@ -25,7 +25,7 @@ export class LocationsRepository {
     return await this.repo.findOne({
       where: { id },
       relationLoadStrategy: 'join',
-      relations: { site: true },
+      relations: { site: true, parent: true },
     });
   }
 
@@ -37,7 +37,7 @@ export class LocationsRepository {
     const [data, total] = await this.repo.findAndCount({
       where,
       relationLoadStrategy: 'join',
-      relations: { site: true },
+      relations: { site: true, parent: true },
       skip,
       take: limit,
     });
@@ -45,8 +45,8 @@ export class LocationsRepository {
   }
 
   async update(id: string, data: LocationsSchema) {
-    const { name, site_id, description } = data;
-    await this.repo.update(id, { name, site_id, description });
+    const { name, site_id, description, parent_id } = data;
+    await this.repo.update(id, { name, site_id, description, parent_id });
     return await this.repo.findOne({ where: { id } });
   }
 
