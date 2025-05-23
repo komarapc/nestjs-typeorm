@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { UnitConversionEntity } from './unit-conversion.entity';
 
 @Entity('unit_items')
 export class UnitItemsEntity {
@@ -21,4 +24,9 @@ export class UnitItemsEntity {
   updated_at?: Date;
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deleted_at?: Date;
+
+  @ManyToOne(() => UnitConversionEntity, (r) => r.form_unit)
+  unit_conversion_from?: UnitConversionEntity;
+  @ManyToOne(() => UnitConversionEntity, (r) => r.to_unit)
+  unit_conversion_to?: UnitConversionEntity;
 }
