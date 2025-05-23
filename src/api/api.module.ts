@@ -19,6 +19,7 @@ import { RolesModule } from './roles/roles.module';
 import { SitesModule } from './sites/sites.module';
 import { UsersModule } from './users/users.module';
 import { UnitItemsModule } from './unit-items/unit-items.module';
+import { UnitConversionsModule } from './unit-conversions/unit-conversions.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UnitItemsModule } from './unit-items/unit-items.module';
     AdmininstrativeAreaModule,
     AddressModule,
     UnitItemsModule,
+    UnitConversionsModule,
   ],
   controllers: [],
   providers: [JwtService],
