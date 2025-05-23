@@ -21,16 +21,16 @@ export class HasRolesEntity {
   @Column({ length: 36 })
   user_id: string;
   @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  created_at?: Date;
   @UpdateDateColumn({ type: 'timestamptz', nullable: true })
-  updated_at: Date;
+  updated_at?: Date;
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deleted_at?: Date;
 
   @ManyToOne(() => RolesEntity, (r) => r.has_roles)
   @JoinColumn({ name: 'role_id' })
-  role: RolesEntity;
+  role?: RolesEntity;
   @ManyToOne(() => UserEntity, (r) => r.has_roles)
   @JoinColumn({ name: 'user_id' })
-  user: UserEntity;
+  user?: UserEntity;
 }

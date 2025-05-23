@@ -29,9 +29,9 @@ export class LocalService {
       if (!user) return responseNotFound({ message: 'User not found' });
       const hasRoles = (await this.hasRolesRepo.findByUserId(user.id)).map(
         (value) => ({
-          id: value.role.id,
-          code: value.role.code,
-          name: value.role.name,
+          id: value?.role?.id,
+          code: value?.role?.code,
+          name: value?.role?.name,
         }),
       );
       const isMatch = compareHash(parsed.password, user.password);

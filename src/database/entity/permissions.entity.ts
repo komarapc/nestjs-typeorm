@@ -34,16 +34,16 @@ export class PermissionsEntity {
   @Column({ type: 'enum', enum: Action, array: true })
   action: Action[];
   @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  created_at?: Date;
   @UpdateDateColumn({ type: 'timestamptz', nullable: true })
-  updated_at: Date;
+  updated_at?: Date;
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
-  deleted_at: Date | null;
+  deleted_at?: Date | null;
 
   @ManyToOne(() => RolesEntity, (r) => r.has_permissions)
   @JoinColumn({ name: 'role_id' })
-  role: RolesEntity;
+  role?: RolesEntity;
   @ManyToOne(() => ResourceEntity, (r) => r.has_permissions)
   @JoinColumn({ name: 'resource_id' })
-  resource: ResourceEntity;
+  resource?: ResourceEntity;
 }

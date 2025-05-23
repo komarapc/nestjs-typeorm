@@ -1,12 +1,13 @@
 import * as fs from 'fs';
 
 import { DataSource } from 'typeorm';
+import { Logger } from '@nestjs/common';
 import { parse } from 'csv-parse/sync';
 import { v7 } from 'uuid';
 
 export const seedVillages = async (dataSource: DataSource) => {
   const repo = dataSource.getRepository('address_villages');
-
+  const logger = new Logger('SeedVillages');
   // Read and parse CSV file
   const csvFile = fs.readFileSync(
     __dirname + '/../dataset/villages.csv',
@@ -19,7 +20,7 @@ export const seedVillages = async (dataSource: DataSource) => {
 
   // Prepare plain objects for bulk insert
   const villages = records.map((row: any) => ({
-    id: v7().toUpperCase(),
+    id: v7(),
     subdistrict_code: row.subdistrict_code,
     code: row.code,
     name: row.name,
@@ -32,7 +33,11 @@ export const seedVillages = async (dataSource: DataSource) => {
     const chunk = villages.slice(i, i + chunkSize);
     insertPromises.push(repo.insert(chunk));
   }
-  await Promise.all(insertPromises);
-
-  console.log('Villages seeded successfully');
+  try {
+    await Promise.all(insertPromises);
+    logger.log('Villages seeded successfully');
+  } catch (error) {
+    logger.error('Error seeding villages:', error);
+    throw error;
+  }
 };

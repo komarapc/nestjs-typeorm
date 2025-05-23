@@ -1,12 +1,14 @@
 import * as fs from 'fs';
 
 import { DataSource } from 'typeorm';
+import { Logger } from '@nestjs/common';
 import { UnitItemsEntity } from '../entity/unit-items.entity';
 import { parse } from 'csv-parse/sync';
 import { v7 } from 'uuid';
 
 type Data = { id: string; name: string; abbreviation: string };
 export const seedUnitItem = async (dataSource: DataSource) => {
+  const logger = new Logger('SeedUnitItem');
   const repo = dataSource.getRepository(UnitItemsEntity);
 
   // Read CSV file
@@ -24,12 +26,17 @@ export const seedUnitItem = async (dataSource: DataSource) => {
   // Prepare plain objects for bulk insert
   const list: Data[] = records.map(
     ({ name, abbreviation }: Data): Data => ({
-      id: v7().toUpperCase(),
+      id: v7(),
       name,
       abbreviation,
     }),
   );
 
-  await repo.insert(list);
-  console.log('Unit item seeded successfully');
+  try {
+    await repo.insert(list);
+    logger.log('Unit item seeded successfully');
+  } catch (error) {
+    logger.error('Error seeding unit items:', error);
+    throw error;
+  }
 };

@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   OneToMany,
   PrimaryColumn,
@@ -18,11 +19,11 @@ export class ResourceEntity {
   @Column()
   path: string;
   @CreateDateColumn({ type: 'timestamptz' })
-  created_at: Date;
+  created_at?: Date;
   @UpdateDateColumn({ type: 'timestamptz', nullable: true })
-  updated_at: Date;
-  @Column({ type: 'timestamptz', nullable: true })
-  deleted_at: Date | null;
+  updated_at?: Date;
+  @DeleteDateColumn({ type: 'timestamptz', nullable: true })
+  deleted_at?: Date | null;
 
   @OneToMany(() => PermissionsEntity, (r) => r.resource, {
     cascade: true,

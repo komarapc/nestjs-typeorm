@@ -31,7 +31,7 @@ export class RoleGuard implements CanActivate {
       (p) => ({
         id: p.id,
         allowedMethod: p.action,
-        path: p.resource.path,
+        path: p.resource?.path,
       }),
     );
     const hasAllPermission = permissions?.some((p) =>
@@ -42,7 +42,7 @@ export class RoleGuard implements CanActivate {
     const hasPermission = permissions?.some((permission) => {
       const { allowedMethod, path } = permission;
       const isAllowedMethod = allowedMethod.includes(method);
-      const isAllowedPath = `/${resourcesUrl}`.includes(path);
+      const isAllowedPath = `/${resourcesUrl}`.includes(path || '*');
       return isAllowedMethod && isAllowedPath;
     });
     if (!hasPermission) throw new ForbiddenException('Forbidden Resource');
