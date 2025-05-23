@@ -30,19 +30,20 @@ export class RoleGuard implements CanActivate {
     const permissions = (await this.permissionRepo.findByRoleId(role_id))?.map(
       (p) => ({
         id: p.id,
+        name: p.resource?.name,
         allowedMethod: p.action,
         path: p.resource?.path,
       }),
     );
-    const hasAllPermission = permissions?.some((p) =>
-      p.allowedMethod.includes(Action.ALL),
+    const hasAllPermission = permissions?.some(
+      (p) => p.allowedMethod.includes(Action.ALL) && p.path === '*',
     );
     if (hasAllPermission) return true;
     if (!permissions.length) throw new ForbiddenException('Forbidden Resource');
     const hasPermission = permissions?.some((permission) => {
       const { allowedMethod, path } = permission;
       const isAllowedMethod = allowedMethod.includes(method);
-      const isAllowedPath = `/${resourcesUrl}`.includes(path || '*');
+      const isAllowedPath = `/${resourcesUrl}`.includes(path || '');
       return isAllowedMethod && isAllowedPath;
     });
     if (!hasPermission) throw new ForbiddenException('Forbidden Resource');
