@@ -24,7 +24,7 @@ function zodErrorParse(error: any) {
 }
 
 function generateId() {
-  return v7().toUpperCase();
+  return v7();
 }
 
 function createHash(text: string) {
