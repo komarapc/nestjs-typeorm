@@ -21,8 +21,6 @@ export class UnitConversionEntity {
   to_unit_id: string;
   @Column({ type: 'decimal', precision: 10, scale: 4 })
   conversion_factor: number;
-  @Column({ type: 'decimal', precision: 10, scale: 4 })
-  conversion_factor_inverse: number;
   @CreateDateColumn({ type: 'timestamptz' })
   created_at?: Date;
   @UpdateDateColumn({ type: 'timestamptz', nullable: true })
