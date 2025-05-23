@@ -17,9 +17,9 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { ResourcesModule } from './resources/resources.module';
 import { RolesModule } from './roles/roles.module';
 import { SitesModule } from './sites/sites.module';
-import { UsersModule } from './users/users.module';
-import { UnitItemsModule } from './unit-items/unit-items.module';
 import { UnitConversionsModule } from './unit-conversions/unit-conversions.module';
+import { UnitItemsModule } from './unit-items/unit-items.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
