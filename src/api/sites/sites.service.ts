@@ -128,7 +128,7 @@ export class SitesService {
     try {
       const parsed = sitesSchema.parse(data);
       const site = await this.siteRepo.store(parsed);
-      return responseCreated({ data: site });
+      return responseCreated({ data: this.transformSiteData(site) });
     } catch (error) {
       const zodErr = zodErrorParse(error);
       if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
@@ -144,7 +144,9 @@ export class SitesService {
       const site = await this.siteRepo.findOne(id);
       if (!site) return responseNotFound({ message: 'Site not found' });
       const updated = await this.siteRepo.update(id, parsed);
-      return responseOk({ data: updated });
+      return responseOk({
+        data: this.transformSiteData(updated as SitesEntity),
+      });
     } catch (error) {
       const zodErr = zodErrorParse(error);
       if (zodErr.isError) return responseBadRequest({ error: zodErr.errors });
