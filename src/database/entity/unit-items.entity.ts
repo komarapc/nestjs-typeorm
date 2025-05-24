@@ -25,7 +25,7 @@ export class UnitItemsEntity {
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deleted_at?: Date;
 
-  @ManyToOne(() => UnitConversionEntity, (r) => r.form_unit)
+  @ManyToOne(() => UnitConversionEntity, (r) => r.from_unit)
   unit_conversion_from?: UnitConversionEntity;
   @ManyToOne(() => UnitConversionEntity, (r) => r.to_unit)
   unit_conversion_to?: UnitConversionEntity;

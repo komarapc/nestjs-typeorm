@@ -19,7 +19,7 @@ export class UnitConversionEntity {
   from_unit_id: string;
   @Column({ length: 36 })
   to_unit_id: string;
-  @Column({ type: 'decimal', precision: 10, scale: 4 })
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   conversion_factor: number;
   @CreateDateColumn({ type: 'timestamptz' })
   created_at?: Date;
@@ -30,7 +30,7 @@ export class UnitConversionEntity {
 
   @ManyToOne(() => UnitItemsEntity, (r) => r.unit_conversion_from)
   @JoinColumn({ name: 'from_unit_id' })
-  form_unit?: UnitItemsEntity;
+  from_unit?: UnitItemsEntity;
   @ManyToOne(() => UnitItemsEntity, (r) => r.unit_conversion_to)
   @JoinColumn({ name: 'to_unit_id' })
   to_unit?: UnitItemsEntity;
