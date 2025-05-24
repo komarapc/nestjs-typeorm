@@ -1,3 +1,5 @@
+import { AddressEntity } from '@/database/entity/address.entity';
+import { AddressRepository } from '../address/address.repository';
 import { CacheRequestService } from '@/common/services/cache-request/cache-request.service';
 import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
@@ -10,7 +12,9 @@ import { SitesService } from './sites.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SitesEntity, PermissionsEntity])],
+  imports: [
+    TypeOrmModule.forFeature([SitesEntity, PermissionsEntity, AddressEntity]),
+  ],
   controllers: [SitesController],
   providers: [
     JwtService,

@@ -4,6 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { SitesQuerySchema, SitesSchema } from './sites.schema';
 import { generateId, zodErrorParse } from '@/common/utils/lib';
+import { AddressEntity } from '@/database/entity/address.entity';
+import { privateDecrypt } from 'crypto';
 
 @Injectable()
 export class SitesRepository {
@@ -49,17 +51,70 @@ export class SitesRepository {
   }
 
   async store(data: SitesSchema) {
+    const { name, address } = data;
+
     const id = generateId();
-    const site = this.repo.create({
-      id,
-      ...data,
+
+    return await this.repo.manager.transaction(async (manager) => {
+      // Create and save address first (if needed)
+      const addressEntity = manager.create(AddressEntity, {
+        id: generateId(),
+        ref_id: id,
+        province_id: address?.provinceId,
+        regency_id: address?.regencyId,
+        subdistrict_id: address?.subdistrictId,
+        village_id: address?.villageId,
+        text_address: address?.textAddress,
+      });
+      const savedAddress = await manager.save(AddressEntity, addressEntity);
+
+      // Create and save site, linking to saved address
+      const site = manager.create(SitesEntity, {
+        id,
+        name,
+        address: savedAddress,
+      });
+      return await manager.save(SitesEntity, site);
     });
-    return this.repo.save(site);
   }
 
   async update(id: string, data: SitesSchema) {
-    const site = await this.repo.update(id, { name: data.name });
-    return await this.findOne(id);
+    const { name, address } = data;
+
+    return await this.repo.manager.transaction(async (manager) => {
+      // Update site name
+      await manager.update(SitesEntity, id, { name });
+
+      // Update address if provided
+      if (address) {
+        // Find the existing address by ref_id (site id)
+        const existingAddress = await manager.findOne(AddressEntity, {
+          where: { ref_id: id },
+        });
+        if (existingAddress) {
+          await manager.update(AddressEntity, existingAddress.id, {
+            province_id: address.provinceId,
+            regency_id: address.regencyId,
+            subdistrict_id: address.subdistrictId,
+            village_id: address.villageId,
+            text_address: address.textAddress,
+          });
+        }
+      }
+
+      // Return the updated site with relations
+      return await manager.findOne(SitesEntity, {
+        where: { id },
+        relations: {
+          address: {
+            province: true,
+            regency: true,
+            subdistrict: true,
+            village: true,
+          },
+        },
+      });
+    });
   }
 
   async destroy(id: string) {
